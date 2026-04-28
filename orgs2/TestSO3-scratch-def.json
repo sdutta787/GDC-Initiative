@@ -1,0 +1,19 @@
+{
+  "orgName": "TestSO3",
+  "edition": "Enterprise",
+  "username": "sdutta37@gmail.com",
+  "country": "IN",
+  "features": [
+    "Einstein1AIPlatform",
+    "DisclosureFramework"
+  ],
+  "settings": {
+    "industriesSettings": {
+      "enableGnrcDisclsFrmwrk": true,
+      "enableIndustriesAssessment": true
+    },
+    "einsteinGptSettings": {
+      "enableEinsteinGptPlatform": true
+    }
+  }
+}
