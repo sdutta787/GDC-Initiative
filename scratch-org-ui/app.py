@@ -13,6 +13,7 @@ import subprocess
 import sys
 import threading
 import uuid
+from datetime import datetime
 from pathlib import Path
 
 # Support local vendor directory for Flask install
@@ -20,17 +21,45 @@ VENDOR_DIR = Path(__file__).resolve().parent / "vendor"
 if VENDOR_DIR.exists():
     sys.path.insert(0, str(VENDOR_DIR))
 
-from flask import Flask, Response, jsonify, render_template, request
+from flask import Flask, Response, jsonify, render_template, request, make_response
 
 app = Flask(__name__)
+app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+
+@app.after_request
+def add_no_cache_headers(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent
 OUT_DIR = REPO_ROOT / "scratch-orgs-templates"
 FEATURES_FILE = SCRIPT_DIR / "features.json"
 SETTINGS_FILE = SCRIPT_DIR / "settings.json"
+HISTORY_FILE = SCRIPT_DIR / "history.json"
+SESSION_FILE = SCRIPT_DIR / "session.json"
 
 jobs: dict[str, dict] = {}
+
+
+def load_history():
+    if HISTORY_FILE.exists():
+        with open(HISTORY_FILE) as f:
+            return json.load(f)
+    return []
+
+
+def save_history_entry(entry):
+    history = load_history()
+    history.insert(0, entry)
+    if len(history) > 100:
+        history = history[:100]
+    with open(HISTORY_FILE, "w") as f:
+        json.dump(history, f, indent=2)
+        f.write("\n")
 
 
 def load_features():
@@ -113,6 +142,38 @@ def authorize_devhub():
         return jsonify({"success": False, "message": "Authorization timed out. Please try again."})
     except Exception as e:
         return jsonify({"success": False, "message": str(e)})
+
+
+@app.route("/api/history")
+def get_history():
+    """Return the history of created scratch orgs."""
+    return jsonify(load_history())
+
+
+@app.route("/api/session", methods=["GET"])
+def get_session():
+    """Load saved session from disk (survives server restarts and port changes)."""
+    if SESSION_FILE.exists():
+        with open(SESSION_FILE) as f:
+            return jsonify(json.load(f))
+    return jsonify(None)
+
+
+@app.route("/api/session", methods=["POST"])
+def save_session():
+    """Save current session state to disk."""
+    data = request.json
+    with open(SESSION_FILE, "w") as f:
+        json.dump(data, f)
+    return jsonify({"ok": True})
+
+
+@app.route("/api/session", methods=["DELETE"])
+def clear_session():
+    """Clear saved session after successful org creation."""
+    if SESSION_FILE.exists():
+        SESSION_FILE.unlink()
+    return jsonify({"ok": True})
 
 
 @app.route("/api/preview", methods=["POST"])
@@ -295,6 +356,14 @@ def run_create_job(job_id, data):
                     "defFile": str(def_file),
                 }
                 emit("details", json.dumps(details))
+                save_history_entry({
+                    "alias": alias,
+                    "username": details["username"],
+                    "instanceUrl": details["instanceUrl"],
+                    "edition": data.get("edition", ""),
+                    "features": data.get("features", []),
+                    "createdAt": datetime.now().isoformat(),
+                })
             except json.JSONDecodeError:
                 pass
 

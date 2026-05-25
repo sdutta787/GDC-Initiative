@@ -85,8 +85,22 @@ launch_web_ui() {
     fi
   fi
 
-  # Find an available port
-  PORT=$(python3 -c "import socket; s=socket.socket(); s.bind(('',0)); print(s.getsockname()[1]); s.close()")
+  # Use a consistent port so browser localStorage persists across sessions
+  PREFERRED_PORT=8484
+  PORT=$(python3 -c "
+import socket
+preferred = $PREFERRED_PORT
+try:
+    s = socket.socket()
+    s.bind(('', preferred))
+    s.close()
+    print(preferred)
+except OSError:
+    s = socket.socket()
+    s.bind(('', 0))
+    print(s.getsockname()[1])
+    s.close()
+")
 
   info "Starting web server on http://localhost:$PORT ..."
   python3 "$UI_DIR/app.py" "$PORT" &

@@ -3,12 +3,16 @@
   "edition": "Developer",
   "hasSampleData": true,
   "features": [
-    "AnalyticsAppEmbedded",
-    "DevelopmentWave"
+    "FieldServiceMobileExtension",
+    "CompareReportsOrgPerm",
+    "CGAnalytics"
   ],
   "settings": {
-    "lightningExperienceSettings": {
-      "enableS1DesktopEnabled": true
+    "mobileSettings": {
+      "enableS1EncryptedStoragePref2": true
+    },
+    "knowledgeSettings": {
+      "enableKnowledge": true
     }
   }
 }

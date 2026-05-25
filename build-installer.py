@@ -154,7 +154,21 @@ if ! python3 -c "import sys; sys.path.insert(0,'$VENDOR_PATH'); import flask" 2>
 fi
 
 # ── launch ─────────────────────────────────────────────────────
-PORT=$(python3 -c "import socket; s=socket.socket(); s.bind(('',0)); print(s.getsockname()[1]); s.close()")
+PREFERRED_PORT=8484
+PORT=$(python3 -c "
+import socket
+preferred = $PREFERRED_PORT
+try:
+    s = socket.socket()
+    s.bind(('', preferred))
+    s.close()
+    print(preferred)
+except OSError:
+    s = socket.socket()
+    s.bind(('', 0))
+    print(s.getsockname()[1])
+    s.close()
+")
 
 say ""
 say "${BOLD}╔══════════════════════════════════════╗${RESET}"
