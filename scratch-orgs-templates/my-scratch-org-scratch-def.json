@@ -1,0 +1,14 @@
+{
+  "orgName": "My Scratch Org",
+  "edition": "Developer",
+  "hasSampleData": true,
+  "features": [
+    "AnalyticsAppEmbedded",
+    "DevelopmentWave"
+  ],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    }
+  }
+}

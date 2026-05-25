@@ -1,0 +1,22 @@
+{
+  "orgName": "My Scratch Org 1",
+  "edition": "Enterprise",
+  "username": "sdutta378@gmail.com",
+  "hasSampleData": true,
+  "features": [
+    "DevelopmentWave",
+    "AnalyticsAppEmbedded",
+    "EinsteinAnalyticsPlus"
+  ],
+  "settings": {
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "chatterSettings": {
+      "enableChatter": true
+    },
+    "pathAssistantSettings": {
+      "pathAssistantEnabled": true
+    }
+  }
+}

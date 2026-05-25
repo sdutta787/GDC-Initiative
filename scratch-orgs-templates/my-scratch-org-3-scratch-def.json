@@ -1,0 +1,19 @@
+{
+  "orgName": "My Scratch Org 3",
+  "edition": "Enterprise",
+  "hasSampleData": true,
+  "features": [
+    "DocGen",
+    "CGAnalytics",
+    "ForceComPlatform"
+  ],
+  "settings": {
+    "orderSettings": {
+      "enableOrders": true,
+      "enableNegativeQuantity": true
+    },
+    "quoteSettings": {
+      "enableQuote": true
+    }
+  }
+}
