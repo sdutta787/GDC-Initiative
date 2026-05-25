@@ -209,9 +209,10 @@
     }
 
     .toggle {
+      display: inline-block;
       position: relative;
-      width: 40px;
-      height: 22px;
+      width: 48px;
+      height: 26px;
     }
 
     .toggle input {
@@ -224,29 +225,30 @@
       position: absolute;
       cursor: pointer;
       inset: 0;
-      background: var(--border);
-      border-radius: 11px;
+      background: #1a1a1a;
+      border-radius: 13px;
       transition: 0.3s;
     }
 
     .toggle-slider::before {
       content: '';
       position: absolute;
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
       left: 3px;
       bottom: 3px;
       background: white;
       border-radius: 50%;
       transition: 0.3s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
     }
 
     .toggle input:checked + .toggle-slider {
-      background: var(--primary);
+      background: #7c3aed;
     }
 
     .toggle input:checked + .toggle-slider::before {
-      transform: translateX(18px);
+      transform: translateX(22px);
     }
 
     .toggle-label {
@@ -476,7 +478,6 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       margin-bottom: 8px;
-      overflow: hidden;
       transition: all 0.2s;
     }
 
@@ -491,6 +492,7 @@
       padding: 12px 16px;
       cursor: pointer;
       background: var(--surface-alt);
+      border-radius: var(--radius) var(--radius) 0 0;
       transition: background 0.2s;
       user-select: none;
     }
@@ -555,6 +557,7 @@
 
     .setting-item .setting-toggle {
       flex-shrink: 0;
+      min-width: 48px;
       margin-top: 2px;
     }
 
@@ -938,11 +941,186 @@
     let currentStep = 1;
     let createdOrgAlias = '';
 
-    document.addEventListener('DOMContentLoaded', () => {
+    const STORAGE_KEY = 'scratchOrgCreator_session';
+    const HISTORY_KEY = 'scratchOrgCreator_history';
+
+    let saveTimeout = null;
+    function saveSession() {
+      try {
+        const session = {
+          step: currentStep,
+          devHub: document.getElementById('devhub-input').value,
+          alias: document.getElementById('org-alias').value,
+          orgName: document.getElementById('org-name').value,
+          edition: document.getElementById('org-edition').value,
+          duration: document.getElementById('org-duration').value,
+          username: document.getElementById('org-username').value,
+          country: document.getElementById('org-country').value,
+          description: document.getElementById('org-description').value,
+          language: document.getElementById('org-language').value,
+          release: document.getElementById('org-release').value,
+          hasSampleData: document.getElementById('org-sample-data').checked,
+          features: featuresChoice ? featuresChoice.getValue(true) : [],
+          featureValues: getFeatureValues(),
+          toggledSettings: getToggledSettingsState(),
+          customSettings: getCustomSettingsRows(),
+          setDefault: document.getElementById('set-default')?.checked ?? true,
+          generatePassword: document.getElementById('generate-password')?.checked ?? true,
+          savedAt: new Date().toISOString(),
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+        // Debounce server-side save to avoid hammering on every keystroke
+        clearTimeout(saveTimeout);
+        saveTimeout = setTimeout(() => {
+          fetch('/api/session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(session),
+          }).catch(() => {});
+        }, 1000);
+      } catch (e) { /* storage full or unavailable */ }
+    }
+
+    function getFeatureValues() {
+      const vals = {};
+      document.querySelectorAll('[id^="fval-"]').forEach(input => {
+        if (input.value) vals[input.id.replace('fval-', '')] = input.value;
+      });
+      return vals;
+    }
+
+    function getToggledSettingsState() {
+      const state = {};
+      document.querySelectorAll('[data-setting-key]').forEach(el => {
+        if (el.dataset.settingType === 'boolean' && el.checked) {
+          state[el.dataset.settingKey] = true;
+        } else if (el.dataset.settingType === 'string' && el.value.trim()) {
+          state[el.dataset.settingKey] = el.value.trim();
+        }
+      });
+      return state;
+    }
+
+    function getCustomSettingsRows() {
+      const rows = [];
+      document.querySelectorAll('.setting-row').forEach(row => {
+        const key = row.querySelector('.setting-key')?.value || '';
+        const val = row.querySelector('.setting-value')?.value || '';
+        if (key || val) rows.push({ key, val });
+      });
+      return rows;
+    }
+
+    function restoreSessionFromLocalStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch { return null; }
+    }
+
+    async function restoreSession() {
+      // Try localStorage first (same port)
+      const local = restoreSessionFromLocalStorage();
+      if (local) return local;
+      // Fall back to server-side session file (survives port changes)
+      try {
+        const res = await fetch('/api/session');
+        const data = await res.json();
+        return data;
+      } catch { return null; }
+    }
+
+    function applyRestoredSession(session) {
+      if (!session) return;
+
+      if (session.devHub) document.getElementById('devhub-input').value = session.devHub;
+      if (session.alias) document.getElementById('org-alias').value = session.alias;
+      if (session.orgName) document.getElementById('org-name').value = session.orgName;
+      if (session.edition) document.getElementById('org-edition').value = session.edition;
+      if (session.duration) {
+        document.getElementById('org-duration').value = session.duration;
+        document.getElementById('duration-display').textContent = session.duration;
+      }
+      if (session.username) document.getElementById('org-username').value = session.username;
+      if (session.country) document.getElementById('org-country').value = session.country;
+      if (session.description) document.getElementById('org-description').value = session.description;
+      if (session.language) document.getElementById('org-language').value = session.language;
+      if (session.release) document.getElementById('org-release').value = session.release;
+      document.getElementById('org-sample-data').checked = !!session.hasSampleData;
+      if (session.setDefault !== undefined) document.getElementById('set-default').checked = session.setDefault;
+      if (session.generatePassword !== undefined) document.getElementById('generate-password').checked = session.generatePassword;
+
+      const warn = document.getElementById('edition-warning');
+      if (session.edition && session.edition.startsWith('Partner')) warn.style.display = 'block';
+    }
+
+    function applyRestoredFeatures(session) {
+      if (!session || !session.features || !session.features.length || !featuresChoice) return;
+      featuresChoice.setChoiceByValue(session.features);
+      updateFeatureValues();
+      if (session.featureValues) {
+        Object.entries(session.featureValues).forEach(([name, val]) => {
+          const input = document.getElementById(`fval-${name}`);
+          if (input) input.value = val;
+        });
+      }
+      const count = featuresChoice.getValue(true).length;
+      document.getElementById('features-count').textContent = `${count} selected`;
+    }
+
+    function applyRestoredSettings(session) {
+      if (!session) return;
+      if (session.toggledSettings) {
+        Object.entries(session.toggledSettings).forEach(([key, val]) => {
+          const el = document.querySelector(`[data-setting-key="${key}"]`);
+          if (!el) return;
+          if (el.dataset.settingType === 'boolean') el.checked = !!val;
+          else if (el.dataset.settingType === 'string') el.value = val;
+        });
+        updateSettingsCount();
+      }
+      if (session.customSettings && session.customSettings.length > 0) {
+        const builder = document.getElementById('settings-builder');
+        session.customSettings.forEach((row, i) => {
+          let rowEl = builder.children[i];
+          if (!rowEl) { addSettingRow(); rowEl = builder.lastElementChild; }
+          const keyInput = rowEl.querySelector('.setting-key');
+          const valInput = rowEl.querySelector('.setting-value');
+          if (keyInput) keyInput.value = row.key;
+          if (valInput) valInput.value = row.val;
+        });
+      }
+    }
+
+    function clearSession() {
+      localStorage.removeItem(STORAGE_KEY);
+      fetch('/api/session', { method: 'DELETE' }).catch(() => {});
+    }
+
+    function addToHistory(details) {
+      try {
+        const history = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+        history.unshift({
+          ...details,
+          createdAt: new Date().toISOString(),
+        });
+        if (history.length > 50) history.length = 50;
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      } catch (e) { /* ignore */ }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const saved = await restoreSession();
       loadDevHubs();
-      loadFeatures();
-      loadSettings();
+      loadFeatures().then(() => { applyRestoredFeatures(saved); updatePreview(); });
+      loadSettings().then(() => { applyRestoredSettings(saved); updatePreview(); });
       setupListeners();
+      applyRestoredSession(saved);
+      if (saved && saved.step > 1) {
+        goToStep(saved.step);
+        showRestoreBanner(saved.savedAt);
+      }
       updatePreview();
     });
 
@@ -1352,6 +1530,7 @@
 
       const jsonStr = JSON.stringify(definition, null, 2);
       document.getElementById('json-preview').innerHTML = syntaxHighlight(jsonStr);
+      saveSession();
     }
 
     function syntaxHighlight(json) {
@@ -1501,6 +1680,8 @@
       `;
       container.classList.add('visible');
       document.getElementById('open-org-btn').style.display = 'inline-flex';
+      addToHistory(details);
+      clearSession();
     }
 
     async function openOrg() {
@@ -1513,6 +1694,33 @@
           body: JSON.stringify({ _action: 'open', alias: createdOrgAlias }),
         });
       } catch {}
+    }
+
+    function showRestoreBanner(savedAt) {
+      const ago = getTimeAgo(savedAt);
+      const banner = document.createElement('div');
+      banner.id = 'restore-banner';
+      banner.style.cssText = 'position:fixed;bottom:20px;right:20px;background:var(--primary-light);border:1px solid var(--primary);border-radius:var(--radius);padding:14px 20px;box-shadow:var(--shadow-lg);z-index:1000;font-size:13px;display:flex;align-items:center;gap:12px;max-width:400px;';
+      banner.innerHTML = `
+        <div style="flex:1;">
+          <strong style="color:var(--primary);">Session Restored</strong><br>
+          <span style="color:var(--text-muted);">Your previous progress from ${ago} was restored.</span>
+        </div>
+        <button onclick="this.parentElement.remove();clearSession();location.reload();" style="background:none;border:1px solid var(--border);border-radius:4px;padding:4px 10px;font-size:12px;cursor:pointer;">Start Fresh</button>
+        <button onclick="this.parentElement.remove();" style="background:none;border:none;font-size:18px;cursor:pointer;color:var(--text-muted);">&times;</button>
+      `;
+      document.body.appendChild(banner);
+      setTimeout(() => { if (document.getElementById('restore-banner')) banner.remove(); }, 10000);
+    }
+
+    function getTimeAgo(isoString) {
+      const diff = Date.now() - new Date(isoString).getTime();
+      const mins = Math.floor(diff / 60000);
+      if (mins < 1) return 'just now';
+      if (mins < 60) return `${mins}m ago`;
+      const hrs = Math.floor(mins / 60);
+      if (hrs < 24) return `${hrs}h ago`;
+      return `${Math.floor(hrs / 24)}d ago`;
     }
 
     document.querySelectorAll('.step').forEach(step => {

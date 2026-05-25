@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Scratch Org Creator — Technical Documentation</title>
+<style>
+@page {
+  size: A4;
+  margin: 2cm;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  font-size: 11pt;
+  line-height: 1.6;
+  color: #1a1a1a;
+  max-width: 100%;
+  padding: 40px;
+}
+h1 {
+  font-size: 24pt;
+  border-bottom: 3px solid #0176d3;
+  padding-bottom: 10px;
+  color: #0176d3;
+}
+h2 {
+  font-size: 18pt;
+  border-bottom: 1px solid #d8dde6;
+  padding-bottom: 8px;
+  margin-top: 30px;
+  color: #014486;
+  page-break-after: avoid;
+}
+h3 {
+  font-size: 14pt;
+  margin-top: 24px;
+  color: #1a1a1a;
+  page-break-after: avoid;
+}
+h4 {
+  font-size: 12pt;
+  margin-top: 18px;
+}
+code {
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 9.5pt;
+  background: #f4f6f9;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border: 1px solid #e8e8e8;
+}
+pre {
+  background: #1e1e2e;
+  color: #cdd6f4;
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 9pt;
+  line-height: 1.5;
+  page-break-inside: avoid;
+}
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 16px 0;
+  font-size: 10pt;
+  page-break-inside: avoid;
+}
+th, td {
+  border: 1px solid #d8dde6;
+  padding: 8px 12px;
+  text-align: left;
+}
+th {
+  background: #f4f6f9;
+  font-weight: 600;
+  color: #014486;
+}
+tr:nth-child(even) {
+  background: #fafbfc;
+}
+blockquote {
+  border-left: 4px solid #0176d3;
+  margin: 16px 0;
+  padding: 8px 16px;
+  background: #e8f4fd;
+}
+hr {
+  border: none;
+  border-top: 1px solid #d8dde6;
+  margin: 24px 0;
+}
+a {
+  color: #0176d3;
+  text-decoration: none;
+}
+ul, ol {
+  margin: 8px 0;
+  padding-left: 24px;
+}
+li {
+  margin: 4px 0;
+}
+.toc {
+  background: #f4f6f9;
+  border: 1px solid #d8dde6;
+  border-radius: 6px;
+  padding: 16px 24px;
+  margin: 20px 0;
+}
+</style>
+</head>
+<body>
+<h1 id="scratch-org-creator-technical-documentation">Scratch Org Creator — Technical Documentation</h1>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#architecture-overview">Architecture Overview</a></li>
+<li><a href="#project-structure">Project Structure</a></li>
+<li><a href="#file-by-file-breakdown">File-by-File Breakdown</a></li>
+<li><a href="#data-flow">Data Flow</a></li>
+<li><a href="#api-endpoints">API Endpoints</a></li>
+<li><a href="#frontend-architecture">Frontend Architecture</a></li>
+<li><a href="#session-persistence">Session Persistence</a></li>
+<li><a href="#distribution--packaging">Distribution &amp; Packaging</a></li>
+<li><a href="#security-considerations">Security Considerations</a></li>
+<li><a href="#dependencies">Dependencies</a></li>
+</ol>
+<hr />
+<h2 id="architecture-overview">Architecture Overview</h2>
+<p>The Scratch Org Creator is a <strong>local-only</strong> web application that provides an interactive browser UI for creating Salesforce scratch orgs. It follows a client-server architecture running entirely on the user's machine:</p>
+<pre><code>┌──────────────────────────────────────────────────────────────┐
+│                      User's Machine                          │
+│                                                              │
+│  ┌─────────────────┐         ┌─────────────────────────┐    │
+│  │   Browser (UI)  │ ◄─────► │  Flask Server (Python)   │    │
+│  │  localhost:8484  │  HTTP   │  scratch-org-ui/app.py   │    │
+│  └─────────────────┘         └───────────┬─────────────┘    │
+│                                          │                   │
+│                                          │ subprocess        │
+│                                          ▼                   │
+│                              ┌───────────────────────┐       │
+│                              │  Salesforce CLI (sf)   │       │
+│                              │  org create scratch    │       │
+│                              │  org login web         │       │
+│                              │  org list              │       │
+│                              └───────────┬───────────┘       │
+│                                          │                   │
+└──────────────────────────────────────────┼───────────────────┘
+                                           │ HTTPS
+                                           ▼
+                              ┌───────────────────────┐
+                              │   Salesforce Platform  │
+                              │   (Dev Hub / Scratch)  │
+                              └───────────────────────┘
+</code></pre>
+<p><strong>Key Design Decisions:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python Flask</td>
+<td>Lightweight, no compilation needed, pre-installed on macOS</td>
+</tr>
+<tr>
+<td>Single HTML file</td>
+<td>No build step, no npm, instant start</td>
+</tr>
+<tr>
+<td>Local vendor directory</td>
+<td>Avoid requiring global pip install or admin permissions</td>
+</tr>
+<tr>
+<td>Server-Sent Events (SSE)</td>
+<td>Real-time streaming of CLI output without WebSocket complexity</td>
+</tr>
+<tr>
+<td>Fixed port (8484)</td>
+<td>Allows browser localStorage to persist across sessions</td>
+</tr>
+<tr>
+<td>Server-side session file</td>
+<td>Survives port changes if 8484 is unavailable</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="project-structure">Project Structure</h2>
+<pre><code>DevOpsGDC/
+├── create-scratch-org.sh              # Main entry point (launcher)
+├── build-installer.py                 # Generates self-contained distributable
+├── scratch-org-creator.sh             # Generated single-file distribution (191 KB)
+├── README.md                          # User-facing documentation
+├── TECHNICAL_DOCUMENTATION.md         # This file
+│
+├── scratch-org-ui/                    # Web UI application
+│   ├── app.py                         # Flask web server (387 lines)
+│   ├── features.json                  # 296 Salesforce features catalog (58 KB)
+│   ├── settings.json                  # 25 categories of org settings (11 KB)
+│   ├── requirements.txt               # Python dependency declaration
+│   ├── .gitignore                     # Excludes vendor/, __pycache__, session/history
+│   ├── templates/
+│   │   └── index.html                 # Complete single-page UI (1735 lines)
+│   ├── vendor/                        # Auto-installed Flask + dependencies (gitignored)
+│   ├── session.json                   # Current form state (gitignored, auto-created)
+│   └── history.json                   # Log of created orgs (gitignored, auto-created)
+│
+└── scratch-orgs-templates/            # Output directory for generated definition files
+    ├── my-scratch-org-scratch-def.json
+    └── ...
+</code></pre>
+<hr />
+<h2 id="file-by-file-breakdown">File-by-File Breakdown</h2>
+<h3 id="1-create-scratch-orgsh-511-lines">1. <code>create-scratch-org.sh</code> (511 lines)</h3>
+<p><strong>Purpose:</strong> Main entry point. Launches either the web UI (default) or a traditional CLI-based interactive flow.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>
+<p><strong>Shell configuration</strong> (lines 1–37): Sets <code>set -u</code> (undefined variable errors) and <code>set -o pipefail</code>. Defines ANSI color codes and helper functions (<code>say</code>, <code>info</code>, <code>ok</code>, <code>warn</code>, <code>err</code>, <code>header</code>) for formatted terminal output. Detects if stdout is a TTY to conditionally enable colors.</p>
+</li>
+<li>
+<p><strong>Path setup</strong> (lines 38–46): Resolves <code>SCRIPT_DIR</code> using <code>${BASH_SOURCE[0]}</code>, sets <code>REPO_ROOT</code>, creates the <code>scratch-orgs-templates/</code> output directory, and points <code>UI_DIR</code> to <code>scratch-org-ui/</code>.</p>
+</li>
+<li>
+<p><strong>Mode selection</strong> (lines 48–62): Parses <code>--web</code>, <code>--cli</code>, and <code>--help</code> flags. Default mode is <code>web</code>.</p>
+</li>
+<li>
+<p><strong>Web UI launcher</strong> (<code>launch_web_ui()</code>, lines 64–137):</p>
+</li>
+<li>Checks for <code>python3</code> availability</li>
+<li>Checks if Flask is importable (from system or local <code>vendor/</code> directory)</li>
+<li>If Flask is missing, installs it to <code>$UI_DIR/vendor</code> using <code>pip3 install --target</code></li>
+<li>Attempts to bind to preferred port 8484 (for localStorage persistence), falls back to random port</li>
+<li>Launches <code>app.py</code> as a background process</li>
+<li>Opens the browser using <code>open</code> (macOS), <code>xdg-open</code> (Linux), or prints URL</li>
+<li>Sets up a <code>trap</code> for INT/TERM signals to kill the server on Ctrl+C</li>
+<li>
+<p>Calls <code>wait</code> to keep the script alive until the server exits</p>
+</li>
+<li>
+<p><strong>CLI mode fallback</strong> (lines 139–511): If web UI fails or <code>--cli</code> is passed:</p>
+</li>
+<li>Prerequisite checks (sf CLI, python3)</li>
+<li>Interactive Dev Hub authorization flow</li>
+<li>Step-by-step prompts for org definition (alias, edition, duration, username, country, features, settings)</li>
+<li>Builds JSON definition using embedded Python for safe JSON construction</li>
+<li>Executes <code>sf org create scratch</code> with retry logic for invalid email errors</li>
+<li>Optional password generation</li>
+<li>Displays org credentials and offers to open in browser</li>
+</ol>
+<p><strong>Key technical details:</strong>
+- Uses <code>printf -v</code> for variable assignment from prompts (avoids subshell issues)
+- Embedded Python scripts (heredocs) handle JSON construction to avoid shell quoting issues
+- The <code>write_def_file</code> function uses a full Python script to parse dot-notation settings into nested JSON objects
+- Error recovery: if <code>INVALID_EMAIL_ADDRESS</code> is detected in the create log, it re-prompts and retries</p>
+<hr />
+<h3 id="2-scratch-org-uiapppy-387-lines">2. <code>scratch-org-ui/app.py</code> (387 lines)</h3>
+<p><strong>Purpose:</strong> Flask web server that serves the HTML UI and provides REST API endpoints for all backend operations.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>
+<p><strong>Vendor path setup</strong> (lines 19–22): Inserts the local <code>vendor/</code> directory into <code>sys.path</code> so Flask can be imported without a global install.</p>
+</li>
+<li>
+<p><strong>Cache control</strong> (lines 30–35): An <code>@app.after_request</code> hook adds <code>Cache-Control: no-cache, no-store, must-revalidate</code> headers to every response, preventing browser caching issues during development.</p>
+</li>
+<li>
+<p><strong>Configuration</strong> (lines 37–44): Defines paths to features catalog, settings catalog, history file, and session file — all relative to the script's own directory.</p>
+</li>
+<li>
+<p><strong>History management</strong> (lines 48–62): <code>load_history()</code> reads <code>history.json</code>, <code>save_history_entry()</code> prepends a new entry and caps at 100 entries.</p>
+</li>
+<li>
+<p><strong>API Routes:</strong></p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Route</th>
+<th>Method</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/</code></td>
+<td>GET</td>
+<td>Serves <code>index.html</code> template</td>
+</tr>
+<tr>
+<td><code>/api/features</code></td>
+<td>GET</td>
+<td>Returns 296 features from <code>features.json</code></td>
+</tr>
+<tr>
+<td><code>/api/settings</code></td>
+<td>GET</td>
+<td>Returns 25 setting categories from <code>settings.json</code></td>
+</tr>
+<tr>
+<td><code>/api/devhubs</code></td>
+<td>GET</td>
+<td>Runs <code>sf org list --json</code> and extracts Dev Hub orgs</td>
+</tr>
+<tr>
+<td><code>/api/authorize</code></td>
+<td>POST</td>
+<td>Runs <code>sf org login web</code> for OAuth authorization</td>
+</tr>
+<tr>
+<td><code>/api/history</code></td>
+<td>GET</td>
+<td>Returns creation history from <code>history.json</code></td>
+</tr>
+<tr>
+<td><code>/api/session</code></td>
+<td>GET</td>
+<td>Returns saved form state from <code>session.json</code></td>
+</tr>
+<tr>
+<td><code>/api/session</code></td>
+<td>POST</td>
+<td>Saves current form state to <code>session.json</code></td>
+</tr>
+<tr>
+<td><code>/api/session</code></td>
+<td>DELETE</td>
+<td>Removes <code>session.json</code> (after successful creation)</td>
+</tr>
+<tr>
+<td><code>/api/preview</code></td>
+<td>POST</td>
+<td>Returns a scratch org definition JSON preview</td>
+</tr>
+<tr>
+<td><code>/api/create</code></td>
+<td>POST</td>
+<td>Starts org creation in a background thread</td>
+</tr>
+<tr>
+<td><code>/api/stream/&lt;job_id&gt;</code></td>
+<td>GET</td>
+<td>SSE endpoint for real-time output</td>
+</tr>
+<tr>
+<td><code>/api/shutdown</code></td>
+<td>POST</td>
+<td>Sends SIGTERM to self for graceful shutdown</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li><strong>Scratch org creation</strong> (<code>run_create_job</code>, lines 270–376):</li>
+<li>Runs in a daemon thread (doesn't block HTTP responses)</li>
+<li>Writes the definition JSON to <code>scratch-orgs-templates/</code></li>
+<li>Constructs the <code>sf org create scratch</code> command with all parameters</li>
+<li>Uses <code>subprocess.Popen</code> with <code>stdout=PIPE, stderr=STDOUT</code> for line-by-line streaming</li>
+<li>Sets <code>FORCE_COLOR=0</code> and <code>NO_COLOR=1</code> environment variables to suppress ANSI output from sf CLI</li>
+<li>Applies regex <code>r'\x1b\[[0-9;]*[A-Za-z]|\x1b\].*?\x07|\r'</code> to strip any remaining escape sequences</li>
+<li>Emits each clean line to a <code>queue.Queue</code> consumed by the SSE endpoint</li>
+<li>On success: generates password, fetches org details, saves to history</li>
+<li>
+<p>On failure: emits error message with exit code</p>
+</li>
+<li>
+<p><strong>SSE streaming</strong> (<code>stream()</code>, lines 211–229):</p>
+</li>
+<li>Returns a <code>text/event-stream</code> response</li>
+<li>Generator function polls the job's queue with 60s timeout</li>
+<li>Sends JSON-encoded messages: <code>{type: "info|output|success|error|warning|details", text: "..."}</code></li>
+<li>Sends <code>{type: "done", status: "success|failed"}</code> as final message</li>
+<li>Sends <code>{type: "ping"}</code> every 60s to keep connection alive</li>
+</ol>
+<hr />
+<h3 id="3-scratch-org-uitemplatesindexhtml-1735-lines">3. <code>scratch-org-ui/templates/index.html</code> (1735 lines)</h3>
+<p><strong>Purpose:</strong> Complete single-page application — HTML, CSS, and JavaScript in one file.</p>
+<p><strong>Structure:</strong></p>
+<pre><code>index.html
+├── &lt;head&gt;
+│   ├── Choices.js CSS (CDN)
+│   └── &lt;style&gt; (660 lines of CSS)
+├── &lt;body&gt;
+│   ├── &lt;header&gt; — App title bar
+│   ├── &lt;div class=&quot;layout&quot;&gt; — CSS Grid (main + sidebar)
+│   │   ├── &lt;div class=&quot;main-panel&quot;&gt;
+│   │   │   ├── Step indicator (1-5 progress bar)
+│   │   │   ├── Step 1: Dev Hub connection
+│   │   │   ├── Step 2: Org definition
+│   │   │   ├── Step 3: Features
+│   │   │   ├── Step 4: Settings
+│   │   │   └── Step 5: Review &amp; Create
+│   │   └── &lt;div class=&quot;sidebar&quot;&gt;
+│   │       └── Live JSON preview panel
+│   ├── Choices.js library (CDN)
+│   └── &lt;script&gt; (800+ lines of JavaScript)
+</code></pre>
+<p><strong>CSS Architecture:</strong>
+- CSS custom properties (<code>:root</code> variables) for theming: colors, spacing, shadows, fonts
+- Responsive grid layout (<code>grid-template-columns: 1fr 380px</code>) with mobile breakpoint at 1024px
+- Custom toggle switches using <code>&lt;label&gt;</code> + hidden <code>&lt;input&gt;</code> + <code>::before</code> pseudo-element
+- Dark theme code panels using Catppuccin-inspired colors
+- Choices.js override styles for consistent look</p>
+<p><strong>JavaScript Architecture:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loadDevHubs()</code></td>
+<td>Fetches <code>/api/devhubs</code>, renders clickable cards</td>
+</tr>
+<tr>
+<td><code>authorizeDevHub()</code></td>
+<td>POSTs to <code>/api/authorize</code>, shows loading spinner, refreshes list</td>
+</tr>
+<tr>
+<td><code>loadFeatures()</code></td>
+<td>Fetches <code>/api/features</code>, builds <code>&lt;optgroup&gt;</code>-organized <code>&lt;select&gt;</code>, initializes Choices.js</td>
+</tr>
+<tr>
+<td><code>loadSettings()</code></td>
+<td>Fetches <code>/api/settings</code>, builds accordion UI with toggles</td>
+</tr>
+<tr>
+<td><code>updatePreview()</code></td>
+<td>Computes definition JSON from form state, renders syntax-highlighted preview</td>
+</tr>
+<tr>
+<td><code>saveSession()</code></td>
+<td>Debounced (1s) save to both localStorage and <code>/api/session</code></td>
+</tr>
+<tr>
+<td><code>restoreSession()</code></td>
+<td>Tries localStorage first, falls back to <code>/api/session</code></td>
+</tr>
+<tr>
+<td><code>createOrg()</code></td>
+<td>POSTs form data to <code>/api/create</code>, opens SSE stream, renders console output</td>
+</tr>
+<tr>
+<td><code>goToStep(n)</code></td>
+<td>Shows/hides step panels, updates progress indicator</td>
+</tr>
+<tr>
+<td><code>filterSettings(query)</code></td>
+<td>Filters settings by label/description/key path</td>
+</tr>
+<tr>
+<td><code>getSettingsFromUI()</code></td>
+<td>Converts toggle states + custom rows into nested JSON object</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Session Persistence Flow:</strong></p>
+<pre><code>User types/clicks → updatePreview() → saveSession()
+                                          │
+                    ┌─────────────────────┼─────────────────────┐
+                    ▼                     ▼                     │
+            localStorage.setItem   POST /api/session            │
+            (immediate)            (debounced 1s)               │
+                                                                │
+Page reload → restoreSession()                                  │
+                    │                                           │
+                    ├── try localStorage ←──────────────────────┘
+                    └── fallback: GET /api/session (survives port change)
+</code></pre>
+<hr />
+<h3 id="4-scratch-org-uifeaturesjson-1828-lines-58-kb">4. <code>scratch-org-ui/features.json</code> (1828 lines, 58 KB)</h3>
+<p><strong>Purpose:</strong> Comprehensive catalog of 296 Salesforce scratch org features sourced from official documentation.</p>
+<p><strong>Schema:</strong></p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;FeatureName&quot;,
+  &quot;description&quot;: &quot;Human-readable description of what this feature enables.&quot;,
+  &quot;category&quot;: &quot;Category Name&quot;,
+  &quot;requiresValue&quot;: false
+}
+</code></pre>
+<p>For features requiring a numeric value:</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;FieldService:&quot;,
+  &quot;description&quot;: &quot;Provides the Field Service license.&quot;,
+  &quot;category&quot;: &quot;Field Service&quot;,
+  &quot;requiresValue&quot;: true,
+  &quot;valueRange&quot;: &quot;1-25&quot;
+}
+</code></pre>
+<p><strong>Categories (20 total):</strong>
+Analytics &amp; Einstein, Automation, Commerce, Core Platform, Data &amp; Integration, Experience Cloud, Field Service, Industries - Education, Industries - Financial, Industries - Health, Industries - Manufacturing, Industries - Nonprofit, Industries - Public Sector, Marketing, Platform, Sales Cloud, Security &amp; Identity, Service Cloud, Sustainability</p>
+<p><strong>How it's used:</strong>
+- Loaded by Flask's <code>/api/features</code> endpoint
+- Frontend groups features into <code>&lt;optgroup&gt;</code> elements by category
+- Choices.js provides searchable multi-select with type-ahead
+- Features with <code>requiresValue: true</code> generate additional numeric input fields</p>
+<hr />
+<h3 id="5-scratch-org-uisettingsjson-401-lines-11-kb">5. <code>scratch-org-ui/settings.json</code> (401 lines, 11 KB)</h3>
+<p><strong>Purpose:</strong> Pre-built catalog of 39 common scratch org settings organized into 25 categories with labels, descriptions, and types.</p>
+<p><strong>Schema:</strong></p>
+<pre><code class="language-json">[
+  {
+    &quot;category&quot;: &quot;Category Name&quot;,
+    &quot;settings&quot;: [
+      {
+        &quot;key&quot;: &quot;dotNotation.pathToSetting&quot;,
+        &quot;label&quot;: &quot;Human-Readable Label&quot;,
+        &quot;description&quot;: &quot;What this setting controls.&quot;,
+        &quot;type&quot;: &quot;boolean&quot;,
+        &quot;default&quot;: true
+      }
+    ]
+  }
+]
+</code></pre>
+<p><strong>Setting types:</strong>
+- <code>boolean</code> — renders as a toggle switch
+- <code>string</code> — renders as a text input field</p>
+<p><strong>Categories include:</strong> Lightning Experience, Chatter &amp; Collaboration, Enhanced Notes, Path Assistant, Opportunity Settings, Activity Settings, Campaigns, Account Settings, Einstein Features, Security &amp; Access, Email, Knowledge, Case Management, Communities, Forecasting, Territory Management, Contracts, Orders, Quotes, Ideas, Social Profiles, Search, Content Deliveries, Pardot, Custom Address</p>
+<p><strong>How the dot-notation key maps to JSON:</strong></p>
+<pre><code>Key: securitySettings.sessionSettings.forceRelogin
+Result JSON:
+{
+  &quot;settings&quot;: {
+    &quot;securitySettings&quot;: {
+      &quot;sessionSettings&quot;: {
+        &quot;forceRelogin&quot;: true
+      }
+    }
+  }
+}
+</code></pre>
+<p>The <code>getSettingsFromUI()</code> JavaScript function splits each key by <code>.</code> and builds nested objects.</p>
+<hr />
+<h3 id="6-scratch-org-uirequirementstxt">6. <code>scratch-org-ui/requirements.txt</code></h3>
+<p><strong>Contents:</strong> <code>flask</code></p>
+<p><strong>Purpose:</strong> Declares the single Python dependency. Used by:
+- The <code>pip3 install --target vendor/ flask</code> command in the launcher script
+- Reference for anyone wanting to install globally</p>
+<p><strong>Transitive dependencies installed:</strong> Werkzeug, Jinja2, itsdangerous, click, MarkupSafe, blinker</p>
+<hr />
+<h3 id="7-scratch-org-uigitignore">7. <code>scratch-org-ui/.gitignore</code></h3>
+<pre><code>vendor/
+__pycache__/
+*.pyc
+history.json
+session.json
+</code></pre>
+<p><strong>Purpose:</strong> Prevents committing:
+- <code>vendor/</code> — locally installed Flask and its dependencies (~5 MB)
+- <code>__pycache__/</code> — Python bytecode cache
+- <code>history.json</code> — user-specific creation history (contains org credentials)
+- <code>session.json</code> — in-progress form state</p>
+<hr />
+<h3 id="8-build-installerpy-232-lines">8. <code>build-installer.py</code> (232 lines)</h3>
+<p><strong>Purpose:</strong> Generates <code>scratch-org-creator.sh</code> — a single self-contained file that embeds all application files as base64-encoded heredocs.</p>
+<p><strong>How it works:</strong></p>
+<ol>
+<li>
+<p><strong>Reads source files</strong> (lines 16–21): <code>app.py</code>, <code>features.json</code>, <code>settings.json</code>, <code>templates/index.html</code></p>
+</li>
+<li>
+<p><strong>Computes content hash</strong> (lines 38–40): SHA-256 of all files concatenated, truncated to 16 hex chars. Used as a version identifier to detect when re-extraction is needed.</p>
+</li>
+<li>
+<p><strong>Generates shell script</strong> with three sections:</p>
+</li>
+<li><strong>Header</strong>: Prerequisite checks, argument parsing (<code>--update</code>, <code>--help</code>), <code>needs_extract()</code> function that compares stored version hash</li>
+<li><strong>Extraction</strong>: For each file, generates a heredoc block:
+     <code>bash
+     python3 -c "import base64,sys; sys.stdout.buffer.write(base64.b64decode(sys.stdin.read()))" &lt;&lt;'__EOF_APP_PY__' &gt; "$INSTALL_DIR/app.py"
+     &lt;base64-encoded content&gt;
+     __EOF_APP_PY__</code></li>
+<li>
+<p><strong>Footer</strong>: Flask installation check, port selection, server launch, browser open</p>
+</li>
+<li>
+<p><strong>Output</strong> (lines 219–227): Writes to <code>scratch-org-creator.sh</code>, sets executable permissions (<code>chmod 0o755</code>), prints size and hash.</p>
+</li>
+</ol>
+<p><strong>Extraction strategy:</strong>
+- Uses heredoc with quoted delimiter (<code>&lt;&lt;'MARKER'</code>) to prevent shell expansion of base64 content
+- Pipes through <code>python3 -c "import base64..."</code> for decoding
+- Files are extracted to <code>~/.scratch-org-creator/</code> on the user's machine
+- Re-extraction only happens if version hash changes or files are missing</p>
+<hr />
+<h3 id="9-scratch-org-creatorsh-179-lines-embedded-data-191-kb">9. <code>scratch-org-creator.sh</code> (179 lines + embedded data, 191 KB)</h3>
+<p><strong>Purpose:</strong> The distributable artifact. A single bash script that contains everything needed to run the tool.</p>
+<p><strong>Runtime behavior:</strong></p>
+<pre><code>First run:
+  1. Check python3 exists → error if not
+  2. Check sf CLI exists → error if not
+  3. Extract 4 files from embedded base64 to ~/.scratch-org-creator/
+  4. Install Flask to ~/.scratch-org-creator/vendor/
+  5. Start server on port 8484
+  6. Open browser
+
+Subsequent runs:
+  1. Check prerequisites
+  2. Skip extraction (version matches)
+  3. Skip Flask install (already in vendor/)
+  4. Start server, open browser
+</code></pre>
+<p><strong>Installation directory:</strong> <code>~/.scratch-org-creator/</code></p>
+<pre><code>~/.scratch-org-creator/
+├── app.py
+├── features.json
+├── settings.json
+├── templates/
+│   └── index.html
+├── vendor/          (Flask + dependencies)
+├── .version         (content hash for update detection)
+├── session.json     (auto-created on use)
+└── history.json     (auto-created on use)
+</code></pre>
+<hr />
+<h2 id="data-flow">Data Flow</h2>
+<h3 id="scratch-org-creation-flow">Scratch Org Creation Flow</h3>
+<pre><code>Browser                    Flask Server                  Salesforce CLI
+  │                            │                              │
+  │  POST /api/create          │                              │
+  │  {alias, edition, ...}     │                              │
+  ├───────────────────────────►│                              │
+  │                            │  Write definition JSON       │
+  │                            │  to scratch-orgs-templates/  │
+  │  {jobId: &quot;uuid&quot;}           │                              │
+  │◄───────────────────────────┤                              │
+  │                            │  Start background thread     │
+  │  GET /api/stream/{jobId}   │                              │
+  ├───────────────────────────►│                              │
+  │                            │  sf org create scratch       │
+  │                            │  --definition-file ...       │
+  │                            ├─────────────────────────────►│
+  │  SSE: {type:&quot;output&quot;,...}  │                              │
+  │◄───────────────────────────┤  stdout line by line         │
+  │  SSE: {type:&quot;output&quot;,...}  │◄─────────────────────────────┤
+  │◄───────────────────────────┤                              │
+  │                            │                              │
+  │                            │  sf org generate password    │
+  │                            ├─────────────────────────────►│
+  │  SSE: {type:&quot;success&quot;,...} │◄─────────────────────────────┤
+  │◄───────────────────────────┤                              │
+  │                            │  sf org display user --json  │
+  │                            ├─────────────────────────────►│
+  │  SSE: {type:&quot;details&quot;,...} │◄─────────────────────────────┤
+  │◄───────────────────────────┤                              │
+  │  SSE: {type:&quot;done&quot;,...}    │                              │
+  │◄───────────────────────────┤  Save to history.json        │
+  │                            │                              │
+</code></pre>
+<h3 id="session-persistence-flow">Session Persistence Flow</h3>
+<pre><code>                    ┌─────────────────────────────────┐
+                    │         Form Interaction         │
+                    └──────────────┬──────────────────┘
+                                   │
+                                   ▼
+                    ┌─────────────────────────────────┐
+                    │        updatePreview()           │
+                    │    (called on every change)      │
+                    └──────────────┬──────────────────┘
+                                   │
+                                   ▼
+                    ┌─────────────────────────────────┐
+                    │         saveSession()            │
+                    └──────┬───────────────┬──────────┘
+                           │               │
+                    Immediate          Debounced (1s)
+                           │               │
+                           ▼               ▼
+                    ┌─────────────┐ ┌─────────────────┐
+                    │ localStorage│ │POST /api/session │
+                    │ (per-port)  │ │  (disk file)     │
+                    └─────────────┘ └─────────────────┘
+
+                    ┌─────────────────────────────────┐
+                    │          Page Load               │
+                    └──────────────┬──────────────────┘
+                                   │
+                                   ▼
+                    ┌─────────────────────────────────┐
+                    │      restoreSession() [async]    │
+                    └──────┬───────────────┬──────────┘
+                           │               │
+                    Try localStorage    Fallback
+                           │               │
+                           ▼               ▼
+                    ┌─────────────┐ ┌─────────────────┐
+                    │ localStorage│ │ GET /api/session │
+                    │ (same port) │ │  (any port)      │
+                    └─────────────┘ └─────────────────┘
+</code></pre>
+<hr />
+<h2 id="api-endpoints">API Endpoints</h2>
+<h3 id="get"><code>GET /</code></h3>
+<p>Returns the rendered <code>index.html</code> template.</p>
+<h3 id="get-apifeatures"><code>GET /api/features</code></h3>
+<p>Returns the full features catalog as JSON array. Used by the frontend to populate the Choices.js multi-select dropdown.</p>
+<p><strong>Response:</strong> <code>[{name, description, category, requiresValue, valueRange?}, ...]</code></p>
+<h3 id="get-apisettings"><code>GET /api/settings</code></h3>
+<p>Returns the settings catalog grouped by category.</p>
+<p><strong>Response:</strong> <code>[{category, settings: [{key, label, description, type, default}, ...]}, ...]</code></p>
+<h3 id="get-apidevhubs"><code>GET /api/devhubs</code></h3>
+<p>Executes <code>sf org list --json</code> via subprocess. Parses the JSON output to find orgs marked as Dev Hubs (from <code>devHubs</code>, <code>nonScratchOrgs</code>, and <code>other</code> buckets where <code>isDevHub</code> is true).</p>
+<p><strong>Response:</strong> <code>[{alias, username}, ...]</code>
+<strong>Timeout:</strong> 30 seconds</p>
+<h3 id="post-apiauthorize"><code>POST /api/authorize</code></h3>
+<p>Executes <code>sf org login web</code> to initiate OAuth authorization flow. Opens a browser window for the user to log in.</p>
+<p><strong>Request body:</strong> <code>{alias: "DevHub", loginUrl: "https://login.salesforce.com"}</code>
+<strong>Response:</strong> <code>{success: true/false, alias?, message}</code>
+<strong>Timeout:</strong> 300 seconds (5 minutes for user to complete login)</p>
+<h3 id="get-apihistory"><code>GET /api/history</code></h3>
+<p>Returns the last 100 successful scratch org creations.</p>
+<p><strong>Response:</strong> <code>[{alias, username, instanceUrl, edition, features, createdAt}, ...]</code></p>
+<h3 id="get-apisession"><code>GET /api/session</code></h3>
+<p>Returns the saved form state from <code>session.json</code>, or <code>null</code> if no session exists.</p>
+<h3 id="post-apisession"><code>POST /api/session</code></h3>
+<p>Saves the current form state to <code>session.json</code>. Called with 1-second debounce from the frontend.</p>
+<h3 id="delete-apisession"><code>DELETE /api/session</code></h3>
+<p>Removes <code>session.json</code>. Called after successful org creation.</p>
+<h3 id="post-apipreview"><code>POST /api/preview</code></h3>
+<p>Accepts form data and returns the scratch org definition JSON that would be written.</p>
+<p><strong>Request body:</strong> <code>{orgName, edition, username?, country?, features?, settings?, ...}</code>
+<strong>Response:</strong> The generated definition object</p>
+<h3 id="post-apicreate"><code>POST /api/create</code></h3>
+<p>Starts scratch org creation. If <code>_action: "open"</code> is in the body, runs <code>sf org open</code> instead.</p>
+<p><strong>Request body:</strong> <code>{alias, orgName, edition, duration, devHub, features, settings, ...}</code>
+<strong>Response:</strong> <code>{jobId: "uuid"}</code></p>
+<h3 id="get-apistreamjob_id"><code>GET /api/stream/&lt;job_id&gt;</code></h3>
+<p>Server-Sent Events endpoint. Streams output from the running job.</p>
+<p><strong>Event format:</strong> <code>data: {"type": "info|output|success|error|warning|details|done", "text": "..."}\n\n</code></p>
+<h3 id="post-apishutdown"><code>POST /api/shutdown</code></h3>
+<p>Sends <code>SIGTERM</code> to the server process for graceful shutdown.</p>
+<hr />
+<h2 id="frontend-architecture">Frontend Architecture</h2>
+<h3 id="5-step-wizard">5-Step Wizard</h3>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Title</th>
+<th>Key Interactions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Dev Hub</td>
+<td>List authorized hubs, select one, or authorize new via OAuth</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Definition</td>
+<td>Alias, edition (with Partner warning), duration slider, username, country</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Features</td>
+<td>Choices.js multi-select with 296 features grouped by category, value inputs for numeric features</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Settings</td>
+<td>Accordion categories with toggle switches, search filter, custom dot-notation settings builder</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Create</td>
+<td>Review toggles, create button, real-time console output, org details card</td>
+</tr>
+</tbody>
+</table>
+<h3 id="third-party-libraries">Third-Party Libraries</h3>
+<table>
+<thead>
+<tr>
+<th>Library</th>
+<th>Version</th>
+<th>Purpose</th>
+<th>Loaded From</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Choices.js</td>
+<td>latest</td>
+<td>Searchable multi-select dropdown</td>
+<td>jsDelivr CDN</td>
+</tr>
+</tbody>
+</table>
+<h3 id="css-design-system">CSS Design System</h3>
+<pre><code class="language-css">:root {
+  --primary: #0176d3;        /* Salesforce blue */
+  --success: #2e844a;        /* Green for success states */
+  --warning: #fe9339;        /* Orange for warnings */
+  --error: #ea001e;          /* Red for errors */
+  --bg: #f4f6f9;             /* Page background */
+  --surface: #ffffff;        /* Card background */
+  --text: #181818;           /* Primary text */
+  --text-muted: #5a6872;    /* Secondary text */
+  --border: #d8dde6;        /* Borders */
+  --radius: 8px;            /* Border radius */
+}
+</code></pre>
+<h3 id="toggle-switch-implementation">Toggle Switch Implementation</h3>
+<p>The toggle switch uses a CSS-only approach:</p>
+<pre><code class="language-html">&lt;label class=&quot;toggle&quot;&gt;
+  &lt;input type=&quot;checkbox&quot;&gt;
+  &lt;span class=&quot;toggle-slider&quot;&gt;&lt;/span&gt;
+&lt;/label&gt;
+</code></pre>
+<ul>
+<li><code>&lt;label&gt;</code> wraps everything so clicking anywhere toggles</li>
+<li><code>&lt;input&gt;</code> is hidden (<code>opacity: 0; width: 0; height: 0</code>)</li>
+<li><code>.toggle-slider</code> is positioned absolutely within the label</li>
+<li><code>.toggle-slider::before</code> is the white knob, animated with <code>transform: translateX(22px)</code></li>
+<li><code>:checked + .toggle-slider</code> changes background from dark (<code>#1a1a1a</code>) to purple (<code>#7c3aed</code>)</li>
+<li><code>display: inline-block</code> on <code>.toggle</code> is <strong>required</strong> because <code>&lt;label&gt;</code> is inline by default and won't accept width/height without it</li>
+</ul>
+<hr />
+<h2 id="session-persistence">Session Persistence</h2>
+<h3 id="two-layer-architecture">Two-Layer Architecture</h3>
+<p><strong>Layer 1: Browser localStorage (fast, per-origin)</strong>
+- Key: <code>scratchOrgCreator_session</code>
+- Saved on every form change (synchronous)
+- Scoped to <code>http://localhost:PORT</code> — only works if port stays the same
+- The server uses preferred port 8484 to maximize localStorage hits</p>
+<p><strong>Layer 2: Server-side file (durable, port-independent)</strong>
+- File: <code>session.json</code> in the app directory
+- Saved with 1-second debounce via <code>POST /api/session</code>
+- Survives port changes, browser cache clears, different browsers
+- Loaded via <code>GET /api/session</code> as fallback when localStorage is empty</p>
+<h3 id="whats-saved">What's Saved</h3>
+<pre><code class="language-json">{
+  &quot;step&quot;: 3,
+  &quot;devHub&quot;: &quot;MyDevHub&quot;,
+  &quot;alias&quot;: &quot;my-scratch-org&quot;,
+  &quot;orgName&quot;: &quot;My Scratch Org&quot;,
+  &quot;edition&quot;: &quot;Enterprise&quot;,
+  &quot;duration&quot;: &quot;14&quot;,
+  &quot;username&quot;: &quot;admin@test.com&quot;,
+  &quot;country&quot;: &quot;US&quot;,
+  &quot;description&quot;: &quot;&quot;,
+  &quot;language&quot;: &quot;en_US&quot;,
+  &quot;release&quot;: &quot;&quot;,
+  &quot;hasSampleData&quot;: false,
+  &quot;features&quot;: [&quot;Communities&quot;, &quot;ServiceCloud&quot;],
+  &quot;featureValues&quot;: {&quot;FieldService:&quot;: &quot;5&quot;},
+  &quot;toggledSettings&quot;: {
+    &quot;lightningExperienceSettings.enableS1DesktopEnabled&quot;: true,
+    &quot;chatterSettings.enableChatter&quot;: true
+  },
+  &quot;customSettings&quot;: [
+    {&quot;key&quot;: &quot;caseSettings.systemUserEmail&quot;, &quot;val&quot;: &quot;support@acme.com&quot;}
+  ],
+  &quot;setDefault&quot;: true,
+  &quot;generatePassword&quot;: true,
+  &quot;savedAt&quot;: &quot;2026-05-26T00:15:00.000Z&quot;
+}
+</code></pre>
+<h3 id="restore-behavior">Restore Behavior</h3>
+<p>On page load:
+1. <code>restoreSession()</code> checks localStorage, then <code>/api/session</code>
+2. If session found with <code>step &gt; 1</code>, navigates to that step
+3. Shows a toast banner: "Session Restored — Your previous progress from Xm ago was restored"
+4. Banner auto-dismisses after 10 seconds, or user clicks "Start Fresh" to clear</p>
+<h3 id="clearing">Clearing</h3>
+<p>Session is cleared (<code>localStorage.removeItem</code> + <code>DELETE /api/session</code>) when:
+- Org creation completes successfully
+- User clicks "Start Fresh" on the restore banner</p>
+<hr />
+<h2 id="distribution-packaging">Distribution &amp; Packaging</h2>
+<h3 id="development-mode">Development Mode</h3>
+<p>Run from the repository:</p>
+<pre><code class="language-bash">bash create-scratch-org.sh
+</code></pre>
+<h3 id="self-contained-distribution">Self-Contained Distribution</h3>
+<p>Generated by <code>python3 build-installer.py</code>:</p>
+<pre><code class="language-bash"># Give customer this single file:
+scratch-org-creator.sh  (191 KB)
+</code></pre>
+<p><strong>How the bundling works:</strong></p>
+<ol>
+<li>Each source file is base64-encoded</li>
+<li>Each encoded payload is embedded in the shell script as a heredoc</li>
+<li>On first run, each heredoc is piped through <code>python3 -c "import base64..."</code> to decode</li>
+<li>Decoded files are written to <code>~/.scratch-org-creator/</code></li>
+<li>A <code>.version</code> file stores the content hash to skip extraction on subsequent runs</li>
+<li><code>--update</code> flag forces re-extraction</li>
+</ol>
+<p><strong>Update flow:</strong></p>
+<pre><code>Developer edits source files
+  → runs python3 build-installer.py
+  → new scratch-org-creator.sh generated with new hash
+  → sends to customer
+  → customer runs it
+  → hash differs from ~/.scratch-org-creator/.version
+  → files re-extracted automatically
+</code></pre>
+<hr />
+<h2 id="security-considerations">Security Considerations</h2>
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Credentials in history.json</td>
+<td>File is gitignored; stored locally only</td>
+</tr>
+<tr>
+<td>Server accessible from network</td>
+<td>Binds to <code>127.0.0.1</code> only (not <code>0.0.0.0</code>)</td>
+</tr>
+<tr>
+<td>No authentication on endpoints</td>
+<td>Local-only tool; not meant for shared/remote use</td>
+</tr>
+<tr>
+<td>ANSI injection from CLI output</td>
+<td>Regex strips all escape sequences before display</td>
+</tr>
+<tr>
+<td>Shell injection</td>
+<td>All CLI commands use array-based <code>subprocess</code> calls (no shell=True)</td>
+</tr>
+<tr>
+<td>Vendor directory trust</td>
+<td>Flask installed from PyPI via pip3</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="dependencies">Dependencies</h2>
+<h3 id="runtime-dependencies">Runtime Dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Dependency</th>
+<th>Required By</th>
+<th>How Provided</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>python3</code> (3.8+)</td>
+<td>Flask server, JSON handling</td>
+<td>Must be pre-installed (ships with macOS)</td>
+</tr>
+<tr>
+<td><code>sf</code> CLI</td>
+<td>All Salesforce operations</td>
+<td>Must be pre-installed by user</td>
+</tr>
+<tr>
+<td>Flask (Python)</td>
+<td>Web server</td>
+<td>Auto-installed to local <code>vendor/</code> directory</td>
+</tr>
+<tr>
+<td>Choices.js</td>
+<td>Feature multi-select</td>
+<td>Loaded from jsDelivr CDN at runtime</td>
+</tr>
+</tbody>
+</table>
+<h3 id="build-dependencies">Build Dependencies</h3>
+<table>
+<thead>
+<tr>
+<th>Dependency</th>
+<th>Required By</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>python3</code></td>
+<td><code>build-installer.py</code></td>
+<td>Standard library only (base64, hashlib, pathlib)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="no-build-step-required">No Build Step Required</h3>
+<p>The application has no compile, transpile, or bundle step. HTML/CSS/JS are served as-is. The only "build" is generating the self-contained installer, which is optional.</p>
+</body>
+</html>
