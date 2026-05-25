@@ -1,0 +1,15 @@
+{
+  "orgName": "My Scratch Org2",
+  "edition": "Developer",
+  "hasSampleData": true,
+  "features": [
+    "AnalyticsAdminPerms",
+    "CustomerExperienceAnalytics",
+    "CustomFieldDataTranslation"
+  ],
+  "settings": {
+    "territory2Settings": {
+      "enableTerritoryManagement2": true
+    }
+  }
+}

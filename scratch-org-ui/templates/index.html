@@ -1,0 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scratch Org Creator</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+  <style>
+    :root {
+      --primary: #0176d3;
+      --primary-hover: #014486;
+      --primary-light: #e8f4fd;
+      --success: #2e844a;
+      --success-light: #e3f3e8;
+      --warning: #fe9339;
+      --warning-light: #fef3e6;
+      --error: #ea001e;
+      --error-light: #fce4e4;
+      --bg: #f4f6f9;
+      --surface: #ffffff;
+      --surface-alt: #f8f9fb;
+      --text: #181818;
+      --text-muted: #5a6872;
+      --border: #d8dde6;
+      --border-focus: #0176d3;
+      --radius: 8px;
+      --shadow: 0 2px 8px rgba(0,0,0,0.08);
+      --shadow-lg: 0 4px 20px rgba(0,0,0,0.12);
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    header svg { width: 32px; height: 32px; fill: var(--primary); }
+
+    header h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    header .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-left: auto;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+      max-width: 1440px;
+      margin: 24px auto;
+      padding: 0 32px;
+      width: 100%;
+      flex: 1;
+    }
+
+    .main-panel { display: flex; flex-direction: column; gap: 20px; }
+
+    .sidebar {
+      position: sticky;
+      top: 80px;
+      height: fit-content;
+      max-height: calc(100vh - 120px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .card-header h2 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .card-header .badge {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 12px;
+    }
+
+    .step-indicator {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 20px;
+      padding: 12px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .step {
+      flex: 1;
+      text-align: center;
+      padding: 8px 4px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .step.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .step.completed {
+      color: var(--success);
+      border-bottom-color: var(--success);
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .form-group .hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: var(--font);
+      color: var(--text);
+      background: var(--surface);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 3px rgba(1, 118, 211, 0.15);
+    }
+
+    textarea { resize: vertical; min-height: 80px; }
+
+    .toggle-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .toggle {
+      position: relative;
+      width: 40px;
+      height: 22px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background: var(--border);
+      border-radius: 11px;
+      transition: 0.3s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      left: 3px;
+      bottom: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: 0.3s;
+    }
+
+    .toggle input:checked + .toggle-slider {
+      background: var(--primary);
+    }
+
+    .toggle input:checked + .toggle-slider::before {
+      transform: translateX(18px);
+    }
+
+    .toggle-label {
+      font-size: 13px;
+      color: var(--text);
+    }
+
+    .range-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .range-group input[type="range"] {
+      flex: 1;
+      accent-color: var(--primary);
+    }
+
+    .range-group .range-value {
+      min-width: 40px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--primary);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover { background: var(--surface-alt); }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover { background: #256e3a; }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .json-preview {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      border-radius: 6px;
+      padding: 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.6;
+      overflow: auto;
+      max-height: 400px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .json-preview .key { color: #89b4fa; }
+    .json-preview .string { color: #a6e3a1; }
+    .json-preview .number { color: #fab387; }
+    .json-preview .boolean { color: #f38ba8; }
+
+    .console-panel {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      border-radius: 6px;
+      padding: 16px;
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.8;
+      max-height: 400px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .console-panel.visible { display: block; }
+
+    .console-panel .line-info { color: #89b4fa; }
+    .console-panel .line-success { color: #a6e3a1; }
+    .console-panel .line-warning { color: #f9e2af; }
+    .console-panel .line-error { color: #f38ba8; }
+    .console-panel .line-output { color: #cdd6f4; }
+
+    .org-details {
+      display: none;
+      background: var(--success-light);
+      border: 1px solid var(--success);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-top: 16px;
+    }
+
+    .org-details.visible { display: block; }
+
+    .org-details h3 {
+      color: var(--success);
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+
+    .org-details .detail-row {
+      display: flex;
+      padding: 6px 0;
+      font-size: 13px;
+    }
+
+    .org-details .detail-label {
+      font-weight: 600;
+      min-width: 100px;
+      color: var(--text);
+    }
+
+    .org-details .detail-value {
+      color: var(--text-muted);
+      word-break: break-all;
+    }
+
+    .devhub-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .devhub-option {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 13px;
+    }
+
+    .devhub-option:hover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .devhub-option.selected {
+      border-color: var(--primary);
+      background: var(--primary-light);
+      box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.2);
+    }
+
+    .devhub-option .alias { font-weight: 600; }
+    .devhub-option .username { color: var(--text-muted); margin-left: 8px; }
+
+    .feature-value-input {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: 8px;
+    }
+
+    .feature-value-input input {
+      width: 80px;
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    .feature-value-input .range-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .settings-builder {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .setting-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .setting-row input {
+      padding: 8px 10px;
+      font-size: 13px;
+    }
+
+    .setting-row .remove-btn {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: var(--error-light);
+      color: var(--error);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .settings-category {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .settings-category.has-active {
+      border-color: var(--primary);
+    }
+
+    .settings-category-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      cursor: pointer;
+      background: var(--surface-alt);
+      transition: background 0.2s;
+      user-select: none;
+    }
+
+    .settings-category-header:hover {
+      background: var(--primary-light);
+    }
+
+    .settings-category-header .cat-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .settings-category-header .cat-count {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--bg);
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    .settings-category-header .cat-count.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .settings-category-header .chevron {
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: transform 0.2s;
+    }
+
+    .settings-category.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .settings-category-body {
+      display: none;
+      padding: 4px 0;
+    }
+
+    .settings-category.open .settings-category-body {
+      display: block;
+    }
+
+    .setting-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 16px;
+      border-top: 1px solid var(--bg);
+      transition: background 0.15s;
+    }
+
+    .setting-item:hover {
+      background: var(--surface-alt);
+    }
+
+    .setting-item .setting-toggle {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .setting-item .setting-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .setting-item .setting-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .setting-item .setting-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .setting-item .setting-key-path {
+      font-size: 10px;
+      font-family: var(--mono);
+      color: var(--text-muted);
+      opacity: 0.7;
+      margin-top: 3px;
+    }
+
+    .setting-item .setting-string-input {
+      margin-top: 6px;
+      width: 100%;
+      max-width: 300px;
+      padding: 6px 10px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .setting-item .setting-string-input:focus {
+      outline: none;
+      border-color: var(--border-focus);
+      box-shadow: 0 0 0 2px rgba(1, 118, 211, 0.1);
+    }
+
+    .settings-category.hidden {
+      display: none;
+    }
+
+    .setting-item.hidden {
+      display: none;
+    }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state {
+      text-align: center;
+      padding: 24px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 1024px) {
+      .layout {
+        grid-template-columns: 1fr;
+        padding: 0 16px;
+      }
+      .sidebar {
+        position: static;
+        max-height: none;
+      }
+    }
+
+    .choices__inner {
+      border-color: var(--border) !important;
+      border-radius: 6px !important;
+      min-height: 42px !important;
+      padding: 4px 8px !important;
+      font-size: 13px !important;
+    }
+
+    .choices__list--dropdown { border-color: var(--border) !important; border-radius: 6px !important; }
+    .choices__list--multiple .choices__item { background: var(--primary) !important; border: none !important; border-radius: 4px !important; font-size: 12px !important; }
+    .is-focused .choices__inner { border-color: var(--border-focus) !important; box-shadow: 0 0 0 3px rgba(1, 118, 211, 0.15) !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    <h1>Scratch Org Creator</h1>
+    <span class="subtitle">Salesforce DX Interactive Setup</span>
+  </header>
+
+  <div class="layout">
+    <div class="main-panel">
+      <div class="step-indicator">
+        <div class="step active" data-step="1">1. Dev Hub</div>
+        <div class="step" data-step="2">2. Definition</div>
+        <div class="step" data-step="3">3. Features</div>
+        <div class="step" data-step="4">4. Settings</div>
+        <div class="step" data-step="5">5. Create</div>
+      </div>
+
+      <!-- Step 1: Dev Hub -->
+      <div class="card step-content" id="step-1">
+        <div class="card-header">
+          <h2>Dev Hub Connection</h2>
+          <span class="badge">Required</span>
+        </div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">
+          Select an existing authorized Dev Hub or enter a new one. The Dev Hub org is required to create scratch orgs.
+        </p>
+        <div id="devhub-loading" class="loading">
+          <div class="spinner"></div>
+          <span>Loading authorized Dev Hubs...</span>
+        </div>
+        <div id="devhub-list" class="devhub-list" style="display:none;"></div>
+        <div id="devhub-empty" class="empty-state" style="display:none;">
+          No authorized Dev Hubs found. Authorize one below or enter an alias manually.
+        </div>
+
+        <div style="margin-top:16px;padding:16px;background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius);">
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px;">Authorize a New Dev Hub</label>
+          <p class="hint" style="margin-bottom:12px;">This will open a Salesforce login page in your browser. Log in to the org you want to use as a Dev Hub.</p>
+          <div class="form-row">
+            <div class="form-group" style="margin-bottom:0;">
+              <input type="text" id="auth-alias" placeholder="Alias for this Dev Hub" value="DevHub">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <select id="auth-login-url">
+                <option value="https://login.salesforce.com">Production / Developer (login.salesforce.com)</option>
+                <option value="https://test.salesforce.com">Sandbox (test.salesforce.com)</option>
+              </select>
+            </div>
+          </div>
+          <div class="btn-group" style="margin-top:12px;">
+            <button class="btn btn-primary" id="auth-btn" onclick="authorizeDevHub()">Authorize Dev Hub</button>
+          </div>
+          <div id="auth-status" style="margin-top:10px;display:none;"></div>
+        </div>
+
+        <div class="form-group" style="margin-top:16px;">
+          <label for="devhub-input">Dev Hub Alias or Username</label>
+          <input type="text" id="devhub-input" placeholder="e.g. DevHub or admin@mydevhub.org">
+          <p class="hint">Select from the list above, authorize a new one, or type an alias/username directly.</p>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-primary" onclick="goToStep(2)">Next: Definition</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Definition -->
+      <div class="card step-content" id="step-2" style="display:none;">
+        <div class="card-header">
+          <h2>Org Definition</h2>
+          <span class="badge">Core Settings</span>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="org-alias">Scratch Org Alias</label>
+            <input type="text" id="org-alias" value="my-scratch-org" placeholder="my-scratch-org">
+          </div>
+          <div class="form-group">
+            <label for="org-name">Org Display Name</label>
+            <input type="text" id="org-name" value="My Scratch Org" placeholder="My Scratch Org">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="org-edition">Edition</label>
+            <select id="org-edition">
+              <optgroup label="Standard Editions">
+                <option value="Developer" selected>Developer</option>
+                <option value="Enterprise">Enterprise</option>
+                <option value="Group">Group</option>
+                <option value="Professional">Professional</option>
+              </optgroup>
+              <optgroup label="Partner Editions (requires Partner Community permission)">
+                <option value="Partner Developer">Partner Developer</option>
+                <option value="Partner Enterprise">Partner Enterprise</option>
+                <option value="Partner Group">Partner Group</option>
+                <option value="Partner Professional">Partner Professional</option>
+              </optgroup>
+            </select>
+            <p class="hint" id="edition-warning" style="display:none;color:var(--warning);font-weight:500;">
+              Partner Editions require special permission. If you get NO_PARTNER_PERMISSION error, log a case in the Partner Community to enable it.
+            </p>
+          </div>
+          <div class="form-group">
+            <label for="org-duration">Duration (days)</label>
+            <div class="range-group">
+              <input type="range" id="org-duration" min="1" max="30" value="7">
+              <span class="range-value" id="duration-display">7</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="org-username">Admin Username (optional)</label>
+            <input type="email" id="org-username" placeholder="admin@example.com">
+            <p class="hint">Leave blank to auto-generate. Must be a valid email format.</p>
+          </div>
+          <div class="form-group">
+            <label for="org-country">Country Code (optional)</label>
+            <input type="text" id="org-country" placeholder="US" maxlength="2">
+            <p class="hint">ISO 2-letter country code.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="org-description">Description (optional)</label>
+          <input type="text" id="org-description" placeholder="Purpose of this scratch org">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="org-language">Language (optional)</label>
+            <input type="text" id="org-language" placeholder="en_US">
+          </div>
+          <div class="form-group">
+            <label for="org-release">Release (optional)</label>
+            <select id="org-release">
+              <option value="">Default (Current)</option>
+              <option value="Previous">Previous</option>
+              <option value="Preview">Preview (Next)</option>
+            </select>
+          </div>
+        </div>
+        <div class="toggle-group">
+          <label class="toggle">
+            <input type="checkbox" id="org-sample-data">
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">Include sample data</span>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-secondary" onclick="goToStep(1)">Back</button>
+          <button class="btn btn-primary" onclick="goToStep(3)">Next: Features</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Features -->
+      <div class="card step-content" id="step-3" style="display:none;">
+        <div class="card-header">
+          <h2>Features</h2>
+          <span class="badge" id="features-count">0 selected</span>
+        </div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">
+          Search and select the features to enable in your scratch org. Features are categorized for easy navigation.
+          <a href="https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_scratch_orgs_def_file_config_values.htm" target="_blank" style="color:var(--primary);">View Salesforce Docs</a>
+        </p>
+        <div class="form-group">
+          <label for="features-select">Select Features</label>
+          <select id="features-select" multiple></select>
+        </div>
+        <div id="feature-values-container" style="margin-top:16px;display:none;">
+          <label style="font-size:13px;font-weight:600;display:block;margin-bottom:8px;">Feature Values</label>
+          <p class="hint" style="margin-bottom:8px;">Some features require a numeric value. Set them below:</p>
+          <div id="feature-values"></div>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-secondary" onclick="goToStep(2)">Back</button>
+          <button class="btn btn-primary" onclick="goToStep(4)">Next: Settings</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Settings -->
+      <div class="card step-content" id="step-4" style="display:none;">
+        <div class="card-header">
+          <h2>Settings</h2>
+          <span class="badge" id="settings-count">0 enabled</span>
+        </div>
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">
+          Browse and toggle org settings by category. Each setting includes a description to help you decide.
+        </p>
+
+        <div class="form-group" style="margin-bottom:16px;">
+          <input type="text" id="settings-search" placeholder="Search settings..." oninput="filterSettings(this.value)">
+        </div>
+
+        <div id="settings-categories"></div>
+
+        <div style="margin-top:24px;padding-top:16px;border-top:1px solid var(--border);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+            <label style="font-size:13px;font-weight:600;">Custom Settings</label>
+            <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;" onclick="addSettingRow()">+ Add Row</button>
+          </div>
+          <p class="hint" style="margin-bottom:12px;">For settings not listed above. Use dot-notation paths and values (true, false, or strings).</p>
+          <div class="settings-builder" id="settings-builder">
+            <div class="setting-row">
+              <input type="text" placeholder="e.g. caseSettings.systemUserEmail" class="setting-key" oninput="updatePreview()">
+              <input type="text" placeholder="e.g. support@acme.com" class="setting-value" oninput="updatePreview()">
+              <button class="remove-btn" onclick="removeSettingRow(this)">&times;</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-secondary" onclick="goToStep(3)">Back</button>
+          <button class="btn btn-primary" onclick="goToStep(5)">Next: Review & Create</button>
+        </div>
+      </div>
+
+      <!-- Step 5: Create -->
+      <div class="card step-content" id="step-5" style="display:none;">
+        <div class="card-header">
+          <h2>Review & Create</h2>
+          <span class="badge">Final Step</span>
+        </div>
+        <div class="toggle-group">
+          <label class="toggle">
+            <input type="checkbox" id="set-default" checked>
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">Set as default scratch org for this project</span>
+        </div>
+        <div class="toggle-group">
+          <label class="toggle">
+            <input type="checkbox" id="generate-password" checked>
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="toggle-label">Generate a password for the scratch org user</span>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-secondary" onclick="goToStep(4)">Back</button>
+          <button class="btn btn-success" id="create-btn" onclick="createOrg()">Create Scratch Org</button>
+        </div>
+
+        <div class="console-panel" id="console-output"></div>
+        <div class="org-details" id="org-details">
+          <h3>Scratch Org Created Successfully!</h3>
+          <div id="org-details-content"></div>
+          <div class="btn-group" style="margin-top:12px;">
+            <button class="btn btn-primary" id="open-org-btn" onclick="openOrg()" style="display:none;">Open Org in Browser</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar: JSON Preview -->
+    <div class="sidebar">
+      <div class="card">
+        <div class="card-header">
+          <h2>JSON Preview</h2>
+          <span class="badge">Live</span>
+        </div>
+        <div class="json-preview" id="json-preview">
+{
+  "orgName": "My Scratch Org",
+  "edition": "Developer"
+}
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-secondary" onclick="copyJson()" style="font-size:12px;">Copy JSON</button>
+          <button class="btn btn-secondary" onclick="downloadJson()" style="font-size:12px;">Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+  <script>
+    let featuresData = [];
+    let settingsData = [];
+    let featuresChoice = null;
+    let currentStep = 1;
+    let createdOrgAlias = '';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDevHubs();
+      loadFeatures();
+      loadSettings();
+      setupListeners();
+      updatePreview();
+    });
+
+    function setupListeners() {
+      const inputs = document.querySelectorAll('#step-1 input, #step-2 input, #step-2 select, #step-5 input');
+      inputs.forEach(el => {
+        el.addEventListener('input', updatePreview);
+        el.addEventListener('change', updatePreview);
+      });
+
+      document.getElementById('org-duration').addEventListener('input', (e) => {
+        document.getElementById('duration-display').textContent = e.target.value;
+      });
+
+      document.getElementById('org-edition').addEventListener('change', (e) => {
+        const warn = document.getElementById('edition-warning');
+        warn.style.display = e.target.value.startsWith('Partner') ? 'block' : 'none';
+      });
+    }
+
+    async function loadDevHubs() {
+      try {
+        const res = await fetch('/api/devhubs');
+        const hubs = await res.json();
+        document.getElementById('devhub-loading').style.display = 'none';
+
+        if (hubs.length === 0) {
+          document.getElementById('devhub-empty').style.display = 'block';
+          return;
+        }
+
+        const list = document.getElementById('devhub-list');
+        list.style.display = 'flex';
+        hubs.forEach(hub => {
+          const div = document.createElement('div');
+          div.className = 'devhub-option';
+          div.innerHTML = `<span class="alias">${hub.alias || '(no alias)'}</span><span class="username">${hub.username}</span>`;
+          div.onclick = () => {
+            document.querySelectorAll('.devhub-option').forEach(d => d.classList.remove('selected'));
+            div.classList.add('selected');
+            document.getElementById('devhub-input').value = hub.alias || hub.username;
+            updatePreview();
+          };
+          list.appendChild(div);
+        });
+      } catch {
+        document.getElementById('devhub-loading').style.display = 'none';
+        document.getElementById('devhub-empty').style.display = 'block';
+      }
+    }
+
+    async function authorizeDevHub() {
+      const btn = document.getElementById('auth-btn');
+      const status = document.getElementById('auth-status');
+      const alias = document.getElementById('auth-alias').value.trim() || 'DevHub';
+      const loginUrl = document.getElementById('auth-login-url').value;
+
+      btn.disabled = true;
+      btn.textContent = 'Waiting for login...';
+      status.style.display = 'block';
+      status.innerHTML = `<div class="loading"><div class="spinner"></div><span>A browser window should open. Log in to your Dev Hub org and authorize access. Waiting...</span></div>`;
+
+      try {
+        const res = await fetch('/api/authorize', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ alias, loginUrl }),
+        });
+        const result = await res.json();
+
+        if (result.success) {
+          status.innerHTML = `<div style="color:var(--success);font-size:13px;font-weight:500;">&#10003; ${result.message}</div>`;
+          document.getElementById('devhub-input').value = alias;
+
+          // Refresh the Dev Hub list
+          document.getElementById('devhub-list').innerHTML = '';
+          document.getElementById('devhub-list').style.display = 'none';
+          document.getElementById('devhub-empty').style.display = 'none';
+          document.getElementById('devhub-loading').style.display = 'flex';
+          await loadDevHubs();
+          updatePreview();
+        } else {
+          status.innerHTML = `<div style="color:var(--error);font-size:13px;">&times; ${result.message}</div>`;
+        }
+      } catch (err) {
+        status.innerHTML = `<div style="color:var(--error);font-size:13px;">&times; Request failed: ${err.message}</div>`;
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Authorize Dev Hub';
+    }
+
+    async function loadFeatures() {
+      try {
+        const res = await fetch('/api/features');
+        featuresData = await res.json();
+
+        const select = document.getElementById('features-select');
+        const categories = {};
+
+        featuresData.forEach(f => {
+          if (!categories[f.category]) categories[f.category] = [];
+          categories[f.category].push(f);
+        });
+
+        Object.keys(categories).sort().forEach(cat => {
+          const group = document.createElement('optgroup');
+          group.label = cat;
+          categories[cat].forEach(f => {
+            const opt = document.createElement('option');
+            opt.value = f.name;
+            opt.textContent = `${f.name} — ${f.description}`;
+            group.appendChild(opt);
+          });
+          select.appendChild(group);
+        });
+
+        featuresChoice = new Choices(select, {
+          removeItemButton: true,
+          searchPlaceholderValue: 'Search features...',
+          placeholderValue: 'Type to search and select features',
+          noResultsText: 'No features found',
+          itemSelectText: 'Click to select',
+          maxItemCount: -1,
+          searchResultLimit: 20,
+          shouldSort: false,
+        });
+
+        select.addEventListener('change', () => {
+          updateFeatureValues();
+          updatePreview();
+          const count = featuresChoice.getValue(true).length;
+          document.getElementById('features-count').textContent = `${count} selected`;
+        });
+      } catch (err) {
+        console.error('Failed to load features:', err);
+      }
+    }
+
+    function updateFeatureValues() {
+      const selected = featuresChoice.getValue(true);
+      const container = document.getElementById('feature-values');
+      const wrapper = document.getElementById('feature-values-container');
+      container.innerHTML = '';
+
+      const valueFeatures = selected.filter(name => {
+        const f = featuresData.find(fd => fd.name === name);
+        return f && f.requiresValue;
+      });
+
+      if (valueFeatures.length === 0) {
+        wrapper.style.display = 'none';
+        return;
+      }
+
+      wrapper.style.display = 'block';
+      valueFeatures.forEach(name => {
+        const f = featuresData.find(fd => fd.name === name);
+        const div = document.createElement('div');
+        div.className = 'feature-value-input';
+        div.style.marginBottom = '8px';
+        div.innerHTML = `
+          <strong style="font-size:13px;min-width:200px;display:inline-block;">${f.name}:</strong>
+          <input type="number" id="fval-${f.name}" placeholder="${f.valueRange}" 
+                 style="width:100px;" oninput="updatePreview()">
+          <span class="range-hint">(${f.valueRange})</span>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function goToStep(step) {
+      document.querySelectorAll('.step-content').forEach(el => el.style.display = 'none');
+      document.getElementById(`step-${step}`).style.display = 'block';
+
+      document.querySelectorAll('.step').forEach(el => {
+        const s = parseInt(el.dataset.step);
+        el.classList.remove('active', 'completed');
+        if (s === step) el.classList.add('active');
+        else if (s < step) el.classList.add('completed');
+      });
+
+      currentStep = step;
+      updatePreview();
+    }
+
+    async function loadSettings() {
+      try {
+        const res = await fetch('/api/settings');
+        settingsData = await res.json();
+        renderSettingsUI();
+      } catch (err) {
+        console.error('Failed to load settings:', err);
+      }
+    }
+
+    function renderSettingsUI() {
+      const container = document.getElementById('settings-categories');
+      container.innerHTML = '';
+
+      settingsData.forEach((category, catIdx) => {
+        const catEl = document.createElement('div');
+        catEl.className = 'settings-category';
+        catEl.dataset.category = category.category.toLowerCase();
+
+        const header = document.createElement('div');
+        header.className = 'settings-category-header';
+        header.innerHTML = `
+          <span class="cat-title">${category.category}</span>
+          <span style="display:flex;align-items:center;gap:8px;">
+            <span class="cat-count" data-cat-idx="${catIdx}">0/${category.settings.length}</span>
+            <span class="chevron">&#9660;</span>
+          </span>
+        `;
+        header.onclick = () => catEl.classList.toggle('open');
+
+        const body = document.createElement('div');
+        body.className = 'settings-category-body';
+
+        category.settings.forEach((setting, setIdx) => {
+          const itemEl = document.createElement('div');
+          itemEl.className = 'setting-item';
+          itemEl.dataset.searchText = `${setting.label} ${setting.description} ${setting.key}`.toLowerCase();
+
+          const toggleId = `setting-${catIdx}-${setIdx}`;
+
+          if (setting.type === 'boolean') {
+            itemEl.innerHTML = `
+              <div class="setting-toggle">
+                <label class="toggle">
+                  <input type="checkbox" id="${toggleId}" data-setting-key="${setting.key}" data-setting-type="boolean"
+                         data-default="${setting.default}" onchange="onSettingChange()">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+              <div class="setting-info">
+                <div class="setting-label">${setting.label}</div>
+                <div class="setting-desc">${setting.description}</div>
+                <div class="setting-key-path">${setting.key}</div>
+              </div>
+            `;
+          } else {
+            itemEl.innerHTML = `
+              <div class="setting-toggle" style="width:40px;"></div>
+              <div class="setting-info">
+                <div class="setting-label">${setting.label}</div>
+                <div class="setting-desc">${setting.description}</div>
+                <div class="setting-key-path">${setting.key}</div>
+                <input type="text" class="setting-string-input" id="${toggleId}"
+                       data-setting-key="${setting.key}" data-setting-type="string"
+                       placeholder="Enter value..." oninput="onSettingChange()">
+              </div>
+            `;
+          }
+
+          body.appendChild(itemEl);
+        });
+
+        catEl.appendChild(header);
+        catEl.appendChild(body);
+        container.appendChild(catEl);
+      });
+    }
+
+    function onSettingChange() {
+      updateSettingsCount();
+      updatePreview();
+    }
+
+    function updateSettingsCount() {
+      let total = 0;
+      settingsData.forEach((category, catIdx) => {
+        let catActive = 0;
+        category.settings.forEach((setting, setIdx) => {
+          const el = document.getElementById(`setting-${catIdx}-${setIdx}`);
+          if (!el) return;
+          if (setting.type === 'boolean' && el.checked) catActive++;
+          else if (setting.type === 'string' && el.value.trim()) catActive++;
+        });
+        total += catActive;
+
+        const countEl = document.querySelector(`[data-cat-idx="${catIdx}"]`);
+        if (countEl) {
+          countEl.textContent = `${catActive}/${category.settings.length}`;
+          countEl.classList.toggle('active', catActive > 0);
+        }
+
+        const catEl = countEl?.closest('.settings-category');
+        if (catEl) catEl.classList.toggle('has-active', catActive > 0);
+      });
+
+      document.getElementById('settings-count').textContent = `${total} enabled`;
+    }
+
+    function filterSettings(query) {
+      const q = query.toLowerCase().trim();
+      document.querySelectorAll('.settings-category').forEach(cat => {
+        let anyVisible = false;
+        cat.querySelectorAll('.setting-item').forEach(item => {
+          const match = !q || item.dataset.searchText.includes(q);
+          item.classList.toggle('hidden', !match);
+          if (match) anyVisible = true;
+        });
+        cat.classList.toggle('hidden', !anyVisible);
+        if (q && anyVisible) cat.classList.add('open');
+      });
+    }
+
+    function getSettingsFromUI() {
+      const settings = {};
+
+      settingsData.forEach((category, catIdx) => {
+        category.settings.forEach((setting, setIdx) => {
+          const el = document.getElementById(`setting-${catIdx}-${setIdx}`);
+          if (!el) return;
+
+          let value = null;
+          if (setting.type === 'boolean' && el.checked) {
+            value = setting.default === false ? true : setting.default === true ? true : true;
+          } else if (setting.type === 'string' && el.value.trim()) {
+            value = el.value.trim();
+          }
+
+          if (value === null) return;
+
+          const parts = setting.key.split('.');
+          let node = settings;
+          for (let i = 0; i < parts.length - 1; i++) {
+            if (!node[parts[i]]) node[parts[i]] = {};
+            if (typeof node[parts[i]] !== 'object') return;
+            node = node[parts[i]];
+          }
+          node[parts[parts.length - 1]] = value;
+        });
+      });
+
+      // Custom settings rows
+      document.querySelectorAll('.setting-row').forEach(row => {
+        const keyInput = row.querySelector('.setting-key');
+        const valInput = row.querySelector('.setting-value');
+        if (keyInput && valInput && keyInput.value.trim()) {
+          const parts = keyInput.value.trim().split('.');
+          let val = valInput.value.trim();
+          if (val === 'true') val = true;
+          else if (val === 'false') val = false;
+          else if (/^\d+$/.test(val)) val = parseInt(val);
+          else if (!val) return;
+
+          let node = settings;
+          for (let i = 0; i < parts.length - 1; i++) {
+            if (!node[parts[i]]) node[parts[i]] = {};
+            node = node[parts[i]];
+          }
+          node[parts[parts.length - 1]] = val;
+        }
+      });
+
+      return Object.keys(settings).length > 0 ? settings : undefined;
+    }
+
+    function getFormData() {
+      const features = featuresChoice ? featuresChoice.getValue(true) : [];
+      const featuresList = features.map(name => {
+        const f = featuresData.find(fd => fd.name === name);
+        if (f && f.requiresValue) {
+          const input = document.getElementById(`fval-${f.name}`);
+          const val = input ? input.value : '';
+          return val ? `${f.name}:${val}` : f.name;
+        }
+        return name;
+      });
+
+      return {
+        alias: document.getElementById('org-alias').value || 'my-scratch-org',
+        orgName: document.getElementById('org-name').value || 'My Scratch Org',
+        edition: document.getElementById('org-edition').value,
+        duration: document.getElementById('org-duration').value,
+        username: document.getElementById('org-username').value,
+        country: document.getElementById('org-country').value,
+        description: document.getElementById('org-description').value,
+        language: document.getElementById('org-language').value,
+        release: document.getElementById('org-release').value,
+        hasSampleData: document.getElementById('org-sample-data').checked,
+        features: featuresList,
+        settings: getSettingsFromUI(),
+        devHub: document.getElementById('devhub-input').value,
+        setDefault: document.getElementById('set-default')?.checked ?? true,
+        generatePassword: document.getElementById('generate-password')?.checked ?? true,
+      };
+    }
+
+    function updatePreview() {
+      const data = getFormData();
+      const definition = {
+        orgName: data.orgName,
+        edition: data.edition,
+      };
+
+      if (data.username) definition.username = data.username;
+      if (data.country) definition.country = data.country;
+      if (data.description) definition.description = data.description;
+      if (data.language) definition.language = data.language;
+      if (data.release) definition.release = data.release;
+      if (data.hasSampleData) definition.hasSampleData = true;
+      if (data.features.length > 0) definition.features = data.features;
+      if (data.settings) definition.settings = data.settings;
+
+      const jsonStr = JSON.stringify(definition, null, 2);
+      document.getElementById('json-preview').innerHTML = syntaxHighlight(jsonStr);
+    }
+
+    function syntaxHighlight(json) {
+      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, (match) => {
+        let cls = 'number';
+        if (/^"/.test(match)) {
+          cls = /:$/.test(match) ? 'key' : 'string';
+        } else if (/true|false/.test(match)) {
+          cls = 'boolean';
+        }
+        return `<span class="${cls}">${match}</span>`;
+      });
+    }
+
+    function addSettingRow() {
+      const builder = document.getElementById('settings-builder');
+      const row = document.createElement('div');
+      row.className = 'setting-row';
+      row.innerHTML = `
+        <input type="text" placeholder="key (dot-notation)" class="setting-key" oninput="updatePreview()">
+        <input type="text" placeholder="value" class="setting-value" oninput="updatePreview()">
+        <button class="remove-btn" onclick="removeSettingRow(this)">&times;</button>
+      `;
+      builder.appendChild(row);
+    }
+
+    function removeSettingRow(btn) {
+      const row = btn.closest('.setting-row');
+      const builder = document.getElementById('settings-builder');
+      if (builder.children.length > 1) {
+        row.remove();
+      } else {
+        row.querySelector('.setting-key').value = '';
+        row.querySelector('.setting-value').value = '';
+      }
+      updatePreview();
+    }
+
+    function copyJson() {
+      const data = getFormData();
+      const definition = buildDefinitionFromData(data);
+      navigator.clipboard.writeText(JSON.stringify(definition, null, 2));
+    }
+
+    function downloadJson() {
+      const data = getFormData();
+      const definition = buildDefinitionFromData(data);
+      const blob = new Blob([JSON.stringify(definition, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${data.alias}-scratch-def.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function buildDefinitionFromData(data) {
+      const def = { orgName: data.orgName, edition: data.edition };
+      if (data.username) def.username = data.username;
+      if (data.country) def.country = data.country;
+      if (data.description) def.description = data.description;
+      if (data.language) def.language = data.language;
+      if (data.release) def.release = data.release;
+      if (data.hasSampleData) def.hasSampleData = true;
+      if (data.features.length > 0) def.features = data.features;
+      if (data.settings) def.settings = data.settings;
+      return def;
+    }
+
+    async function createOrg() {
+      const btn = document.getElementById('create-btn');
+      btn.disabled = true;
+      btn.textContent = 'Creating...';
+
+      const consoleEl = document.getElementById('console-output');
+      consoleEl.classList.add('visible');
+      consoleEl.innerHTML = '';
+
+      const data = getFormData();
+
+      try {
+        const res = await fetch('/api/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+        const { jobId } = await res.json();
+        createdOrgAlias = data.alias;
+
+        const evtSource = new EventSource(`/api/stream/${jobId}`);
+        evtSource.onmessage = (event) => {
+          const msg = JSON.parse(event.data);
+
+          if (msg.type === 'done') {
+            evtSource.close();
+            btn.disabled = false;
+            btn.textContent = 'Create Scratch Org';
+            if (msg.status === 'success') {
+              appendConsole('success', 'Done! Scratch org is ready.');
+            }
+            return;
+          }
+
+          if (msg.type === 'ping') return;
+
+          if (msg.type === 'details') {
+            try {
+              const details = JSON.parse(msg.text);
+              showOrgDetails(details);
+            } catch {}
+            return;
+          }
+
+          appendConsole(msg.type, msg.text);
+        };
+
+        evtSource.onerror = () => {
+          evtSource.close();
+          btn.disabled = false;
+          btn.textContent = 'Create Scratch Org';
+        };
+      } catch (err) {
+        appendConsole('error', `Request failed: ${err.message}`);
+        btn.disabled = false;
+        btn.textContent = 'Create Scratch Org';
+      }
+    }
+
+    function appendConsole(type, text) {
+      const consoleEl = document.getElementById('console-output');
+      const line = document.createElement('div');
+      line.className = `line-${type}`;
+      line.textContent = text;
+      consoleEl.appendChild(line);
+      consoleEl.scrollTop = consoleEl.scrollHeight;
+    }
+
+    function showOrgDetails(details) {
+      const container = document.getElementById('org-details');
+      const content = document.getElementById('org-details-content');
+      content.innerHTML = `
+        <div class="detail-row"><span class="detail-label">Alias:</span><span class="detail-value">${details.alias}</span></div>
+        <div class="detail-row"><span class="detail-label">Username:</span><span class="detail-value">${details.username}</span></div>
+        <div class="detail-row"><span class="detail-label">Password:</span><span class="detail-value">${details.password || '(not set)'}</span></div>
+        <div class="detail-row"><span class="detail-label">Instance URL:</span><span class="detail-value">${details.instanceUrl}</span></div>
+        <div class="detail-row"><span class="detail-label">Def File:</span><span class="detail-value">${details.defFile}</span></div>
+      `;
+      container.classList.add('visible');
+      document.getElementById('open-org-btn').style.display = 'inline-flex';
+    }
+
+    async function openOrg() {
+      if (!createdOrgAlias) return;
+      appendConsole('info', `Opening org '${createdOrgAlias}' in browser...`);
+      try {
+        await fetch('/api/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ _action: 'open', alias: createdOrgAlias }),
+        });
+      } catch {}
+    }
+
+    document.querySelectorAll('.step').forEach(step => {
+      step.addEventListener('click', () => {
+        const target = parseInt(step.dataset.step);
+        goToStep(target);
+      });
+    });
+  </script>
+</body>
+</html>

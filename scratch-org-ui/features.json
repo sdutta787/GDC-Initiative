@@ -1,0 +1,1827 @@
+[
+  {
+    "name": "AccountInspection",
+    "description": "Enables the Account Intelligence view showing account metrics, activities, and related opportunities and cases.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "AccountingSubledgerGrowthEdition",
+    "description": "Provides permission sets that enable access to Accounting Subledger Growth features.",
+    "category": "Industries - Financial",
+    "requiresValue": false
+  },
+  {
+    "name": "AccountingSubledgerStarterEdition",
+    "description": "Provides permission sets that enable access to Accounting Subledger Starter features.",
+    "category": "Industries - Financial",
+    "requiresValue": false
+  },
+  {
+    "name": "AccountingSubledgerUser",
+    "description": "Enables organization-wide access to Accounting Subledger Growth features when the package is installed.",
+    "category": "Industries - Financial",
+    "requiresValue": false
+  },
+  {
+    "name": "AddCustomApps",
+    "description": "Increases the maximum number of custom apps allowed in an org.",
+    "category": "Core Platform",
+    "requiresValue": true,
+    "valueRange": "1-30"
+  },
+  {
+    "name": "AddCustomObjects",
+    "description": "Increases the maximum number of custom objects allowed in the org.",
+    "category": "Core Platform",
+    "requiresValue": true,
+    "valueRange": "1-30"
+  },
+  {
+    "name": "AddCustomRelationships",
+    "description": "Increases the maximum number of custom relationships allowed on an object.",
+    "category": "Core Platform",
+    "requiresValue": true,
+    "valueRange": "1-10"
+  },
+  {
+    "name": "AddCustomTabs",
+    "description": "Increases the maximum number of custom tabs allowed in an org.",
+    "category": "Core Platform",
+    "requiresValue": true,
+    "valueRange": "1-30"
+  },
+  {
+    "name": "AddDataComCRMRecordCredit",
+    "description": "Increases record import credits assigned to a user in your scratch org.",
+    "category": "Data & Integration",
+    "requiresValue": true,
+    "valueRange": "1-30"
+  },
+  {
+    "name": "AddInsightsQueryLimit",
+    "description": "Increases the size of your CRM Analytics query results (multiplier is 10).",
+    "category": "Analytics & Einstein",
+    "requiresValue": true,
+    "valueRange": "1-30"
+  },
+  {
+    "name": "AdditionalFieldHistory",
+    "description": "Increases the number of fields you can track history for beyond the default 20.",
+    "category": "Core Platform",
+    "requiresValue": true,
+    "valueRange": "1-40"
+  },
+  {
+    "name": "AdmissionsConnectUser",
+    "description": "Enables the Admissions Connect components for Education Cloud.",
+    "category": "Industries - Education",
+    "requiresValue": false
+  },
+  {
+    "name": "AdvisorLinkFeature",
+    "description": "Enables the Student Success Hub components.",
+    "category": "Industries - Education",
+    "requiresValue": false
+  },
+  {
+    "name": "AdvisorLinkPathwaysFeature",
+    "description": "Enables the Pathways components for Education Cloud.",
+    "category": "Industries - Education",
+    "requiresValue": false
+  },
+  {
+    "name": "AIAttribution",
+    "description": "Provides access to Einstein Attribution for Marketing Cloud Account Engagement.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "AllUserIdServiceAccess",
+    "description": "Enables all users to access all users' information via the user ID service.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "AnalyticsAdminPerms",
+    "description": "Enables all permissions required to administer the CRM Analytics platform.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "AnalyticsAppEmbedded",
+    "description": "Provides one CRM Analytics Embedded App license for the CRM Analytics platform.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "ApexGuruCodeAnalyzer",
+    "description": "Enables ApexGuru's generative AI-powered runtime insights in Salesforce Code Analyzer.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "API",
+    "description": "Enables additional APIs (SOAP, Streaming, Bulk, Bulk 2.0) in editions that don't provide full API access.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "ArcGraphCommunity",
+    "description": "Lets you add Actionable Relationship Center (ARC) components to Experience Cloud pages.",
+    "category": "Experience Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "Assessments",
+    "description": "Enables dynamic Assessments features including Assessment Questions and Question Sets.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "AssetScheduling",
+    "description": "Enables Asset Scheduling license for booking rooms and equipment.",
+    "category": "Field Service",
+    "requiresValue": true,
+    "valueRange": "1-10"
+  },
+  {
+    "name": "AssociationEngine",
+    "description": "Enables the Association Engine for automatically associating accounts with branch units.",
+    "category": "Industries - Financial",
+    "requiresValue": false
+  },
+  {
+    "name": "AuthorApex",
+    "description": "Enables access and modification of Apex code. Enabled by default in Enterprise and Developer Editions.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "B2BCommerce",
+    "description": "Provides the B2B License enabling business-to-business commerce.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "B2BLoyaltyManagement",
+    "description": "Enables the B2B Loyalty Management license for loyalty programs.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "B2CCommerceGMV",
+    "description": "Provides the B2B2C Commerce License for retail storefronts and digital channels.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "B2CLoyaltyManagement",
+    "description": "Enables the Loyalty Management - Growth license.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "B2CLoyaltyManagementPlus",
+    "description": "Enables the Loyalty Management - Advanced license.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "BatchManagement",
+    "description": "Enables the Batch Management license for processing high volume records.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "BenefitManagement",
+    "description": "Enables objects, features, and permissions for managing benefits programs in Public Sector Solutions.",
+    "category": "Industries - Public Sector",
+    "requiresValue": false
+  },
+  {
+    "name": "BigObjectsBulkAPI",
+    "description": "Enables the scratch org to use BigObjects in the Bulk API.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "BillingAdvanced",
+    "description": "Enables access to all Billing features with the Revenue Cloud Billing license.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "Briefcase",
+    "description": "Enables Briefcase Builder for creating offline briefcases.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "BudgetManagement",
+    "description": "Gives users access to budget management features and objects.",
+    "category": "Industries - Public Sector",
+    "requiresValue": false
+  },
+  {
+    "name": "BusinessRulesEngine",
+    "description": "Enables Business Rules Engine including expression sets and lookup tables.",
+    "category": "Automation",
+    "requiresValue": false
+  },
+  {
+    "name": "BYOCCaaS",
+    "description": "Enables setup and testing of a partner contact center with CCaaS providers.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "BYOOTT",
+    "description": "Enables Bring Your Own Channel for Messaging with supported providers.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "CacheOnlyKeys",
+    "description": "Enables the cache-only keys service for storing key material outside Salesforce.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "CalloutSizeMB",
+    "description": "Increases the maximum size of an Apex callout.",
+    "category": "Core Platform",
+    "requiresValue": true,
+    "valueRange": "3-12"
+  },
+  {
+    "name": "CampaignInfluence2",
+    "description": "Provides access to Customizable Campaign Influence for Sales Cloud and Marketing Cloud.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "CascadeDelete",
+    "description": "Provides lookup relationships with cascading delete functionality.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "CaseClassification",
+    "description": "Enables Einstein Case Classification for recommending field values to agents.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "CaseWrapUp",
+    "description": "Enables Einstein Case Wrap-Up for recommending case field values from chat transcripts.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "CGAnalytics",
+    "description": "Enables the Consumer Goods Analytics org perm in scratch orgs.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "ChangeDataCapture",
+    "description": "Enables Change Data Capture if the scratch org edition doesn't automatically enable it.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "Chatbot",
+    "description": "Enables deployment of Bot metadata and allows creating and editing bots.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "ChatterEmailFooterLogo",
+    "description": "Allows using a Document ID of a logo image to customize Chatter emails.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "ChatterEmailFooterText",
+    "description": "Allows using footer text in customized Chatter emails.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "ChatterEmailSenderName",
+    "description": "Allows customizing the sender name in Chatter email notifications.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "CloneApplication",
+    "description": "Allows cloning an existing custom Lightning app for customization.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "CMSMaxContType",
+    "description": "Limits the number of distinct content types in Salesforce CMS to 21.",
+    "category": "Experience Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "CMSMaxNodesPerContType",
+    "description": "Limits the maximum number of child nodes per content type to 15.",
+    "category": "Experience Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "CMSUnlimitedUse",
+    "description": "Enables unlimited content records, content types, and bandwidth in Salesforce CMS.",
+    "category": "Experience Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "Communities",
+    "description": "Allows the org to create an Experience Cloud site. Must also include communitiesSettings.enableNetworksEnabled.",
+    "category": "Experience Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "CompareReportsOrgPerm",
+    "description": "Enables the org permission for comparison of Lightning Reports.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "ConAppPluginExecuteAsUser",
+    "description": "Enables the pluginExecutionUser field in the ConnectedApp Metadata API object.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "ConcStreamingClients",
+    "description": "Increases maximum concurrent streaming clients across all channels (API v36.0 and earlier).",
+    "category": "Data & Integration",
+    "requiresValue": true,
+    "valueRange": "20-4000"
+  },
+  {
+    "name": "ConnectedAppCustomNotifSubscription",
+    "description": "Enables connected apps to subscribe to custom notification types.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "ConnectedAppToolingAPI",
+    "description": "Enables the use of connected apps with the Tooling API.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "ConsentEventStream",
+    "description": "Enables the Consent Event Stream permission for the org.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "ConsolePersistenceInterval",
+    "description": "Increases how often console data is saved, in minutes.",
+    "category": "Service Cloud",
+    "requiresValue": true,
+    "valueRange": "0-500"
+  },
+  {
+    "name": "ContactsToMultipleAccounts",
+    "description": "Enables relating a contact to two or more accounts.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "ContractApprovals",
+    "description": "Enables contract approvals for tracking contracts through an approval process.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "ContractManagement",
+    "description": "Enables the Contract Lifecycle Management (CLM) features.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "ContractMgmtInd",
+    "description": "Enables Contract Lifecycle Management (CLM) features for Industries.",
+    "category": "Industries - General",
+    "requiresValue": false
+  },
+  {
+    "name": "CoreCpq",
+    "description": "Enables read-write access to Revenue Cloud features and objects.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "CPQ",
+    "description": "Enables licensed features required to install the Salesforce CPQ managed package.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "CustomerDataPlatform",
+    "description": "Enables the CustomerDataPlatform (Data Cloud) license in scratch orgs.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "CustomerDataPlatformLite",
+    "description": "Enables the Data Cloud license in scratch orgs (requires CustomerDataPlatform feature).",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "CustomerExperienceAnalytics",
+    "description": "Enables the Customer Lifecycle Analytics org perm.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "CustomFieldDataTranslation",
+    "description": "Enables translation of custom field data for Work Type Group, Service Territory, and Service Resource.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "CustomNotificationType",
+    "description": "Allows the org to create custom notification types for desktop and mobile notifications.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "DataComDnbAccounts",
+    "description": "Provides a license to Data.com account features.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "DataComFullClean",
+    "description": "Provides a license to Data.com cleaning features.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "DataMaskUser",
+    "description": "Provides 30 Data Mask permission set licenses.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "DataProcessingEngine",
+    "description": "Enables Data Processing Engine for transforming data and writing back results.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "DebugApex",
+    "description": "Enables Apex Interactive Debugger for setting breakpoints and inspecting code.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "DecisionTable",
+    "description": "Enables Decision Table license for reading business rules and deciding outcomes.",
+    "category": "Automation",
+    "requiresValue": false
+  },
+  {
+    "name": "DefaultWorkflowUser",
+    "description": "Sets the scratch org admin as the default workflow user.",
+    "category": "Automation",
+    "requiresValue": false
+  },
+  {
+    "name": "DeferSharingCalc",
+    "description": "Allows admins to suspend and resume group membership and sharing rule calculations.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "DevelopmentWave",
+    "description": "Enables CRM Analytics development with platform licenses and Einstein Discovery.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "DeviceTrackingEnabled",
+    "description": "Enables Device Tracking.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "DevOpsCenter",
+    "description": "Enables DevOps Center in scratch orgs for 2GP package development.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "DisableManageIdConfAPI",
+    "description": "Limits access to LoginIP and ClientBrowser API objects to view or delete only.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "DisclosureFramework",
+    "description": "Provides permission set licenses for Disclosure and Compliance Hub.",
+    "category": "Industries - Financial",
+    "requiresValue": false
+  },
+  {
+    "name": "Division",
+    "description": "Turns on Manage Divisions for segmenting organizational data into logical sections.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "DocGen",
+    "description": "Enables the Document Generation Feature in the org.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "DocGenDesigner",
+    "description": "Enables designers to create and configure document templates.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "DocGenInd",
+    "description": "Enables the Industry Document Generation features.",
+    "category": "Industries - General",
+    "requiresValue": false
+  },
+  {
+    "name": "DocumentChecklist",
+    "description": "Enables Document Tracking and Approval features for upload and approval workflows.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "DocumentReaderPageLimit",
+    "description": "Limits the number of pages sent for data extraction to 5.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "DSARPortability",
+    "description": "Enables DSARPortability feature in Privacy Center.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "DurableClassicStreamingAPI",
+    "description": "Enables Durable PushTopic Streaming API for API version 37.0 and later.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "DurableGenericStreamingAPI",
+    "description": "Enables Durable Generic Streaming API for API version 37.0 and later.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "DynamicClientCreationLimit",
+    "description": "Allows the org to register up to 100 OAuth 2.0 connected apps dynamically.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "EAndUDigitalSales",
+    "description": "Enables the Energy and Utilities Digital Sales feature.",
+    "category": "Industries - Energy",
+    "requiresValue": false
+  },
+  {
+    "name": "EAndUSelfServicePortal",
+    "description": "Enables Self Service Portal features for Digital Experience users.",
+    "category": "Industries - Energy",
+    "requiresValue": false
+  },
+  {
+    "name": "EAOutputConnectors",
+    "description": "Enable CRM Analytics Output Connectors.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "EASyncOut",
+    "description": "Enable CRM Analytics SyncOut.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "EducationCloud",
+    "description": "Enables use of Education Cloud.",
+    "category": "Industries - Education",
+    "requiresValue": true,
+    "valueRange": "1-10"
+  },
+  {
+    "name": "Einstein1AIPlatform",
+    "description": "Provides access to Einstein generative AI features: Agentforce, Prompt Builder, Model Builder, and Models API.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "EinsteinAnalyticsPlus",
+    "description": "Provides one CRM Analytics Plus license.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "EinsteinArticleRecommendations",
+    "description": "Provides licenses for Einstein Article Recommendations using past case data.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "EinsteinBuilderFree",
+    "description": "Provides a license for one enabled prediction with Einstein Prediction Builder.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "EinsteinDocReader",
+    "description": "Provides license for Intelligent Form Reader using OCR with Amazon Textract.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "EinsteinRecommendationBuilder",
+    "description": "Provides a license for Einstein Recommendation Builder.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "EinsteinSalesRepFdbk",
+    "description": "Enables Agentforce Sales Coach and Einstein for Sales Generative AI features.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "EinsteinSearch",
+    "description": "Provides license for Einstein Search features.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "EinsteinVisits",
+    "description": "Enables Consumer Goods Cloud for retail execution and store management.",
+    "category": "Industries - General",
+    "requiresValue": false
+  },
+  {
+    "name": "EinsteinVisitsED",
+    "description": "Enables Einstein Discovery for store visit recommendations.",
+    "category": "Industries - General",
+    "requiresValue": false
+  },
+  {
+    "name": "EmbeddedLoginForIE",
+    "description": "Provides JavaScript files that support Embedded Login in IE11.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "EmpPublishRateLimit",
+    "description": "Increases maximum standard-volume platform event notifications published per hour.",
+    "category": "Data & Integration",
+    "requiresValue": true,
+    "valueRange": "1000-10000"
+  },
+  {
+    "name": "EnablePRM",
+    "description": "Enables partner relationship management permissions.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "EnableManageIdConfUI",
+    "description": "Enables access to LoginIP and ClientBrowser API objects for identity verification.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "Enablement",
+    "description": "Enables features for creating, taking, and tracking sales programs.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "EnableSetPasswordInApi",
+    "description": "Enables sf org generate password to change password without old password.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "EncryptionStatisticsInterval",
+    "description": "Defines the interval between encryption statistics gathering processes.",
+    "category": "Security & Identity",
+    "requiresValue": true,
+    "valueRange": "0-604800"
+  },
+  {
+    "name": "EncryptionSyncInterval",
+    "description": "Defines how frequently the org synchronizes data with active key material.",
+    "category": "Security & Identity",
+    "requiresValue": true,
+    "valueRange": "0-604800"
+  },
+  {
+    "name": "EnergyAndUtilitiesCloud",
+    "description": "Enables Energy and Utilities Cloud features.",
+    "category": "Industries - Energy",
+    "requiresValue": false
+  },
+  {
+    "name": "Entitlements",
+    "description": "Enables entitlements (units of customer support like phone or web support).",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "ERMAnalytics",
+    "description": "Enables the ERM Analytics org perm in scratch orgs.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "EventLogFile",
+    "description": "Enables API access to org event log files for usage and behavior analysis.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "EntityTranslation",
+    "description": "Enables translation of field data for Work Type Group, Service Territory, and Service Resource.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "ExcludeSAMLSessionIndex",
+    "description": "Excludes Session Index in SAML SSO and SLO flows.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "Explainability",
+    "description": "Enables Decision Explainer features.",
+    "category": "Automation",
+    "requiresValue": false
+  },
+  {
+    "name": "ExpressionSetMaxExecPerHour",
+    "description": "Enables running up to 500,000 expression sets per hour via Connect REST API.",
+    "category": "Automation",
+    "requiresValue": false
+  },
+  {
+    "name": "ExternalIdentityLogin",
+    "description": "Allows the scratch org to use Salesforce Customer Identity features.",
+    "category": "Experience Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "FieldAuditTrail",
+    "description": "Enables Field Audit Trail allowing up to 60 tracked fields.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "FieldService",
+    "description": "Provides the Field Service license.",
+    "category": "Field Service",
+    "requiresValue": true,
+    "valueRange": "1-25"
+  },
+  {
+    "name": "FieldServiceAppointmentAssistantUser",
+    "description": "Adds the Field Service Appointment Assistant permission set license.",
+    "category": "Field Service",
+    "requiresValue": true,
+    "valueRange": "1-25"
+  },
+  {
+    "name": "FieldServiceDispatcherUser",
+    "description": "Adds the Field Service Dispatcher permission set license.",
+    "category": "Field Service",
+    "requiresValue": true,
+    "valueRange": "1-25"
+  },
+  {
+    "name": "FieldServiceLastMileUser",
+    "description": "Adds the Field Service Last Mile permission set license.",
+    "category": "Field Service",
+    "requiresValue": true,
+    "valueRange": "1-25"
+  },
+  {
+    "name": "FieldServiceMobileExtension",
+    "description": "Adds the Field Service Mobile Extension permission set license.",
+    "category": "Field Service",
+    "requiresValue": false
+  },
+  {
+    "name": "FieldServiceMobileUser",
+    "description": "Adds the Field Service Mobile permission set license.",
+    "category": "Field Service",
+    "requiresValue": true,
+    "valueRange": "1-25"
+  },
+  {
+    "name": "FieldServiceSchedulingUser",
+    "description": "Adds the Field Service Scheduling permission set license.",
+    "category": "Field Service",
+    "requiresValue": true,
+    "valueRange": "1-25"
+  },
+  {
+    "name": "FinanceLogging",
+    "description": "Adds Finance Logging objects to a scratch org.",
+    "category": "Industries - Financial",
+    "requiresValue": false
+  },
+  {
+    "name": "FinancialServicesCommunityUser",
+    "description": "Adds Financial Services Insurance Community permission set license.",
+    "category": "Industries - Financial",
+    "requiresValue": true,
+    "valueRange": "1-10"
+  },
+  {
+    "name": "FinancialServicesInsuranceUser",
+    "description": "Adds Financial Services Insurance permission set license.",
+    "category": "Industries - Financial",
+    "requiresValue": false
+  },
+  {
+    "name": "FinancialServicesUser",
+    "description": "Adds Financial Services Cloud Standard permission set license.",
+    "category": "Industries - Financial",
+    "requiresValue": true,
+    "valueRange": "1-10"
+  },
+  {
+    "name": "FlowSites",
+    "description": "Enables the use of flows in Salesforce Sites and customer portals.",
+    "category": "Automation",
+    "requiresValue": false
+  },
+  {
+    "name": "ForceComPlatform",
+    "description": "Adds one Salesforce Platform user license.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "ForecastEnableCustomField",
+    "description": "Enables custom currency and number fields for use as measures in forecasts.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "FSCAlertFramework",
+    "description": "Makes Financial Services Cloud Record Alert entities accessible.",
+    "category": "Industries - Financial",
+    "requiresValue": false
+  },
+  {
+    "name": "FSCServiceProcess",
+    "description": "Enables the Service Process Studio feature of Financial Services Cloud.",
+    "category": "Industries - Financial",
+    "requiresValue": false
+  },
+  {
+    "name": "Fundraising",
+    "description": "Gives users access to Nonprofit Cloud for Fundraising features.",
+    "category": "Industries - Nonprofit",
+    "requiresValue": false
+  },
+  {
+    "name": "GenericStreaming",
+    "description": "Enables Generic Streaming API for API version 36.0 and earlier.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "GenStreamingEventsPerDay",
+    "description": "Increases maximum generic streaming event notifications within 24 hours.",
+    "category": "Data & Integration",
+    "requiresValue": true,
+    "valueRange": "10000-50000"
+  },
+  {
+    "name": "Grantmaking",
+    "description": "Gives users access to Grantmaking features in Salesforce and Experience Cloud.",
+    "category": "Industries - Nonprofit",
+    "requiresValue": false
+  },
+  {
+    "name": "GuidanceHubAllowed",
+    "description": "Enables the Guidance Center panel in Lightning Experience.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "HealthCloudAddOn",
+    "description": "Enables use of Health Cloud.",
+    "category": "Industries - Health",
+    "requiresValue": false
+  },
+  {
+    "name": "HealthCloudEOLOverride",
+    "description": "Overrides the retirement of the Health Cloud CandidatePatient object.",
+    "category": "Industries - Health",
+    "requiresValue": false
+  },
+  {
+    "name": "HealthCloudForCmty",
+    "description": "Enables Health Cloud for Experience Cloud Sites.",
+    "category": "Industries - Health",
+    "requiresValue": false
+  },
+  {
+    "name": "HealthCloudMedicationReconciliation",
+    "description": "Allows Medication Management to support Medication Reconciliation.",
+    "category": "Industries - Health",
+    "requiresValue": false
+  },
+  {
+    "name": "HealthCloudPNMAddOn",
+    "description": "Enables use of Provider Network Management.",
+    "category": "Industries - Health",
+    "requiresValue": false
+  },
+  {
+    "name": "HealthCloudUser",
+    "description": "Enables Health Cloud objects and features for one user.",
+    "category": "Industries - Health",
+    "requiresValue": false
+  },
+  {
+    "name": "HighVelocitySales",
+    "description": "Provides Sales Engagement licenses and enables Salesforce Inbox.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "HighVolumePlatformEventAddOn",
+    "description": "Increases daily high-volume platform event delivery allocation by 100,000.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "HLSAnalytics",
+    "description": "Enables the HLS Analytics org perm.",
+    "category": "Industries - Health",
+    "requiresValue": false
+  },
+  {
+    "name": "HoursBetweenCoverageJob",
+    "description": "Sets the frequency (hours) for sharing inheritance coverage reports.",
+    "category": "Security & Identity",
+    "requiresValue": true,
+    "valueRange": "1-24"
+  },
+  {
+    "name": "IdentityProvisioningFeatures",
+    "description": "Enables Salesforce Identity User Provisioning.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "IgnoreQueryParamWhitelist",
+    "description": "Ignores allowlisting rules for query parameter filter rules.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "IndustriesActionPlan",
+    "description": "Provides a license for Action Plans with tasks and document checklist items.",
+    "category": "Industries - General",
+    "requiresValue": false
+  },
+  {
+    "name": "IndustriesBranchManagement",
+    "description": "Enables branch management for tracking work output in Financial Services Cloud.",
+    "category": "Industries - Financial",
+    "requiresValue": false
+  },
+  {
+    "name": "IndustriesCompliantDataSharing",
+    "description": "Grants access to participant management and advanced data sharing configuration.",
+    "category": "Industries - General",
+    "requiresValue": false
+  },
+  {
+    "name": "IndustriesMfgAdvncdAccFrcs",
+    "description": "Enables Advanced Account Forecasting for multi-horizon forecasts.",
+    "category": "Industries - Manufacturing",
+    "requiresValue": false
+  },
+  {
+    "name": "IndustriesMfgPartnerVisitMgmt",
+    "description": "Enables Partner Visit Management for scheduling visits to partner locations.",
+    "category": "Industries - Manufacturing",
+    "requiresValue": false
+  },
+  {
+    "name": "IndustriesMfgProgram",
+    "description": "Enables Program Based Business for end-to-end program lifecycle management.",
+    "category": "Industries - Manufacturing",
+    "requiresValue": false
+  },
+  {
+    "name": "IndustriesMfgRebates",
+    "description": "Enables Rebate Management for incentive programs and automated payouts.",
+    "category": "Industries - Manufacturing",
+    "requiresValue": false
+  },
+  {
+    "name": "IndustriesMfgTargets",
+    "description": "Enables Sales Agreements for negotiating purchase/sale of products over time.",
+    "category": "Industries - Manufacturing",
+    "requiresValue": false
+  },
+  {
+    "name": "IndustriesManufacturingCmty",
+    "description": "Provides Manufacturing Sales Agreement for Community permission set license.",
+    "category": "Industries - Manufacturing",
+    "requiresValue": false
+  },
+  {
+    "name": "IndustriesMfgAccountForecast",
+    "description": "Enables Account Forecast based on orders, opportunities, and sales agreements.",
+    "category": "Industries - Manufacturing",
+    "requiresValue": false
+  },
+  {
+    "name": "InsightsPlatform",
+    "description": "Enables the CRM Analytics Plus license.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "InsuranceCalculationUser",
+    "description": "Enables the calculation feature of Insurance with BRE and OmniStudio licenses.",
+    "category": "Industries - Financial",
+    "requiresValue": false
+  },
+  {
+    "name": "InsuranceClaimMgmt",
+    "description": "Enables claim management features.",
+    "category": "Industries - Financial",
+    "requiresValue": false
+  },
+  {
+    "name": "InsurancePolicyAdmin",
+    "description": "Enables policy administration features.",
+    "category": "Industries - Financial",
+    "requiresValue": false
+  },
+  {
+    "name": "IntelligentDocumentReader",
+    "description": "Provides license for Intelligent Document Reader using OCR with Amazon Textract.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "InvestigativeCaseManagement",
+    "description": "Enables investigative case management for Public Sector Solutions.",
+    "category": "Industries - Public Sector",
+    "requiresValue": false
+  },
+  {
+    "name": "InvoiceManagement",
+    "description": "Enables all Billing features with the Revenue Cloud Advanced license.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "Interaction",
+    "description": "Enables flows for collecting data and performing actions.",
+    "category": "Automation",
+    "requiresValue": false
+  },
+  {
+    "name": "IoT",
+    "description": "Enables IoT for consuming platform events in business workflows.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "JigsawUser",
+    "description": "Provides one license to Jigsaw features.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "Knowledge",
+    "description": "Enables Salesforce Knowledge for creating and managing a knowledge base.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "LegacyLiveAgentRouting",
+    "description": "Enables legacy Live Agent routing for Chat in Salesforce Classic.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "LightningSalesConsole",
+    "description": "Adds one Lightning Sales Console user license.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "LightningScheduler",
+    "description": "Enables Lightning Scheduler for appointment scheduling.",
+    "category": "Field Service",
+    "requiresValue": false
+  },
+  {
+    "name": "LightningServiceConsole",
+    "description": "Assigns the Lightning Service Console License for faster case management.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "LiveAgent",
+    "description": "Enables Chat for Service Cloud web-based real-time support.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "LiveMessage",
+    "description": "Enables Messaging for Service Cloud (SMS, Facebook Messenger, etc.).",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "LongLayoutSectionTitles",
+    "description": "Allows page layout section titles up to 80 characters.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "LoyaltyAnalytics",
+    "description": "Enables Analytics for Loyalty license with actionable insights.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "LoyaltyEngine",
+    "description": "Enables Loyalty Management Promotion Setup license.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "LoyaltyManagementStarter",
+    "description": "Enables the Loyalty Management - Starter license.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "LoyaltyMaximumPartners",
+    "description": "Increases the number of loyalty program partners.",
+    "category": "Commerce",
+    "requiresValue": true,
+    "valueRange": "1-1"
+  },
+  {
+    "name": "LoyaltyMaximumPrograms",
+    "description": "Increases the number of loyalty programs.",
+    "category": "Commerce",
+    "requiresValue": true,
+    "valueRange": "1-1"
+  },
+  {
+    "name": "LoyaltyMaxOrderLinePerHour",
+    "description": "Increases order lines processed per hour by loyalty processes.",
+    "category": "Commerce",
+    "requiresValue": true,
+    "valueRange": "1-3500000"
+  },
+  {
+    "name": "LoyaltyMaxProcExecPerHour",
+    "description": "Increases transaction journals processed by loyalty processes per hour.",
+    "category": "Commerce",
+    "requiresValue": true,
+    "valueRange": "1-500000"
+  },
+  {
+    "name": "LoyaltyMaxTransactions",
+    "description": "Increases Transaction Journal records that can be processed.",
+    "category": "Commerce",
+    "requiresValue": true,
+    "valueRange": "1-50000000"
+  },
+  {
+    "name": "LoyaltyMaxTrxnJournals",
+    "description": "Increases Transaction Journal records that can be stored.",
+    "category": "Commerce",
+    "requiresValue": true,
+    "valueRange": "1-50000000"
+  },
+  {
+    "name": "Macros",
+    "description": "Enables macros for predefined instructions on commonly used actions.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "MarketingCloud",
+    "description": "Provides licenses for Marketing Cloud Growth edition (campaigns, flows, emails, forms).",
+    "category": "Marketing",
+    "requiresValue": false
+  },
+  {
+    "name": "MarketingUser",
+    "description": "Provides write access to the Campaigns object.",
+    "category": "Marketing",
+    "requiresValue": false
+  },
+  {
+    "name": "MaterialityAssessment",
+    "description": "Provides permission sets for materiality assessment in Net Zero Cloud.",
+    "category": "Industries - Sustainability",
+    "requiresValue": false
+  },
+  {
+    "name": "MaxActiveDPEDefs",
+    "description": "Increases active Data Processing Engine definitions.",
+    "category": "Data & Integration",
+    "requiresValue": true,
+    "valueRange": "1-50"
+  },
+  {
+    "name": "MaxApexCodeSize",
+    "description": "Limits the non-test, unmanaged Apex code size in MB.",
+    "category": "Core Platform",
+    "requiresValue": true,
+    "valueRange": "1-100"
+  },
+  {
+    "name": "MaxCustomLabels",
+    "description": "Limits the number of custom labels (in thousands).",
+    "category": "Core Platform",
+    "requiresValue": true,
+    "valueRange": "1-15"
+  },
+  {
+    "name": "MaxDecisionTableAllowed",
+    "description": "Increases decision table rules that can be created.",
+    "category": "Automation",
+    "requiresValue": true,
+    "valueRange": "1-30"
+  },
+  {
+    "name": "MaxFavoritesAllowed",
+    "description": "Increases the number of Favorites allowed.",
+    "category": "Core Platform",
+    "requiresValue": true,
+    "valueRange": "0-200"
+  },
+  {
+    "name": "MaxNoOfLexThemesAllowed",
+    "description": "Increases the number of Lightning Themes allowed.",
+    "category": "Core Platform",
+    "requiresValue": true,
+    "valueRange": "0-300"
+  },
+  {
+    "name": "MaxStreamingTopics",
+    "description": "Increases maximum delivered PushTopic event notifications per 24 hours.",
+    "category": "Data & Integration",
+    "requiresValue": true,
+    "valueRange": "40-100"
+  },
+  {
+    "name": "MaxUserNavItemsAllowed",
+    "description": "Increases navigation items a user can add to the navigation bar.",
+    "category": "Core Platform",
+    "requiresValue": true,
+    "valueRange": "0-500"
+  },
+  {
+    "name": "MaxUserStreamingChannels",
+    "description": "Increases maximum user-defined channels for generic streaming.",
+    "category": "Data & Integration",
+    "requiresValue": true,
+    "valueRange": "20-1000"
+  },
+  {
+    "name": "MinKeyRotationInterval",
+    "description": "Sets encryption key rotation interval to once per 60 seconds.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "MobileExtMaxFileSizeMB",
+    "description": "Increases file size for Field Service Mobile extensions.",
+    "category": "Field Service",
+    "requiresValue": true,
+    "valueRange": "1-2000"
+  },
+  {
+    "name": "MobileSecurity",
+    "description": "Enables Enhanced Mobile Security with policy controls.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "MobileVoiceAndLLM",
+    "description": "Allows mobile apps to download LLMs and voice models for offline use.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "MultiCurrency",
+    "description": "Enables multiple currencies in the org.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "MultiLevelMasterDetail",
+    "description": "Allows creation of multi-level master-detail relationships.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "MutualAuthentication",
+    "description": "Requires client certificates for mutual authentication of inbound requests.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "MyTrailhead",
+    "description": "Enables access to a myTrailhead enablement site.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "NonprofitCloudCaseManagementUser",
+    "description": "Provides permission set license for Nonprofit Cloud Case Management.",
+    "category": "Industries - Nonprofit",
+    "requiresValue": false
+  },
+  {
+    "name": "NumPlatformEvents",
+    "description": "Increases maximum number of platform event definitions.",
+    "category": "Data & Integration",
+    "requiresValue": true,
+    "valueRange": "5-20"
+  },
+  {
+    "name": "ObjectLinking",
+    "description": "Creates rules to link channel interactions to objects (Beta).",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "OmnistudioMetadata",
+    "description": "Enables OmniStudio metadata API for programmatic deployment.",
+    "category": "Industries - General",
+    "requiresValue": false
+  },
+  {
+    "name": "OmnistudioRuntime",
+    "description": "Enables execution of OmniScripts, DataMappers, FlexCards in employee apps.",
+    "category": "Industries - General",
+    "requiresValue": false
+  },
+  {
+    "name": "OmnistudioDesigner",
+    "description": "Enables creating new OmniScripts, DataMappers, and Integration Procedures.",
+    "category": "Industries - General",
+    "requiresValue": false
+  },
+  {
+    "name": "OrderManagement",
+    "description": "Provides Salesforce Order Management license for the full order lifecycle.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "OrderSaveLogicEnabled",
+    "description": "Enables New Order Save Behavior.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "OrderSaveBehaviorBoth",
+    "description": "Enables both New and Old Order Save Behavior.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "OutboundMessageHTTPSession",
+    "description": "Enables HTTP endpoint URLs in outbound messages with Send Session ID.",
+    "category": "Automation",
+    "requiresValue": false
+  },
+  {
+    "name": "OutcomeManagement",
+    "description": "Gives access to Outcome Management features in Salesforce and Experience Cloud.",
+    "category": "Industries - Nonprofit",
+    "requiresValue": false
+  },
+  {
+    "name": "PardotScFeaturesCampaignInfluence",
+    "description": "Enables additional campaign influence models for Pardot users.",
+    "category": "Marketing",
+    "requiresValue": false
+  },
+  {
+    "name": "PersonAccounts",
+    "description": "Enables person accounts in your scratch org.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "PipelineInspection",
+    "description": "Enables Pipeline Inspection for consolidated pipeline view with metrics.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "PlatformCache",
+    "description": "Enables Platform Cache and allocates 3 MB for faster performance.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "PlatformConnect",
+    "description": "Enables Salesforce Connect for viewing external data.",
+    "category": "Data & Integration",
+    "requiresValue": true,
+    "valueRange": "1-5"
+  },
+  {
+    "name": "PlatformEncryption",
+    "description": "Shield Platform Encryption for encrypting data at rest.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "PlatformEventsPerDay",
+    "description": "Increases maximum delivered standard-volume platform event notifications per day.",
+    "category": "Data & Integration",
+    "requiresValue": true,
+    "valueRange": "10000-50000"
+  },
+  {
+    "name": "ProcessBuilder",
+    "description": "Enables Process Builder for automating business processes.",
+    "category": "Automation",
+    "requiresValue": false
+  },
+  {
+    "name": "ProductsAndSchedules",
+    "description": "Enables product schedules on products and opportunities.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "ProductCatalogManagementAddOn",
+    "description": "Enables read-write access to Product Catalog Management.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "ProductCatalogManagementViewerAddOn",
+    "description": "Enables read access to Product Catalog Management.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "ProgramManagement",
+    "description": "Enables access to all Program Management and Case Management features.",
+    "category": "Industries - Nonprofit",
+    "requiresValue": false
+  },
+  {
+    "name": "ProviderFreePlatformCache",
+    "description": "Provides 3 MB free Platform Cache for security-reviewed managed packages.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "ProviderManagement",
+    "description": "Enables provider network management for Public Sector Solutions.",
+    "category": "Industries - Public Sector",
+    "requiresValue": false
+  },
+  {
+    "name": "PSSAssetManagement",
+    "description": "Enables asset management for Public Sector Solutions.",
+    "category": "Industries - Public Sector",
+    "requiresValue": false
+  },
+  {
+    "name": "PublicSectorAccess",
+    "description": "Enables access to all Public Sector features and objects.",
+    "category": "Industries - Public Sector",
+    "requiresValue": false
+  },
+  {
+    "name": "PublicSectorSiteTemplate",
+    "description": "Allows Public Sector users to build Experience Cloud sites from templates.",
+    "category": "Industries - Public Sector",
+    "requiresValue": false
+  },
+  {
+    "name": "RateManagement",
+    "description": "Enables Rate Management for setting and optimizing usage-based product rates.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "RecordTypes",
+    "description": "Enables Record Types for different processes, picklists, and page layouts.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "RefreshOnInvalidSession",
+    "description": "Enables automatic refreshes of Lightning pages on invalid session.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "RevSubscriptionManagement",
+    "description": "Enables Subscription Management for B2B subscriptions and one-time sales.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "SalesCloudEinstein",
+    "description": "Enables Sales Cloud Einstein features and Salesforce Inbox.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "SalesforceContentUser",
+    "description": "Enables access to Salesforce content features.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "SalesforceFeedbackManagementStarter",
+    "description": "Provides license for Salesforce Feedback Management - Starter features.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "SalesforceHostedMCP",
+    "description": "Enables hosted MCP servers on the scratch org for MCP client connections.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "SalesforceIdentityForCommunities",
+    "description": "Adds Salesforce Identity components for login and self-registration in Experience Builder.",
+    "category": "Experience Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "SalesforcePricing",
+    "description": "Enables Salesforce Pricing for managing prices across product portfolio.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "SalesUser",
+    "description": "Provides a license for Sales Cloud features.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "SAML20SingleLogout",
+    "description": "Enables SAML 2.0 single logout.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "SCIMProtocol",
+    "description": "Enables SCIM protocol base API support.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "ScvMultipartyAndConsult",
+    "description": "Enables multiparty and consult calls for Service Cloud Voice.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "SecurityEventEnabled",
+    "description": "Enables access to security events in Event Monitoring.",
+    "category": "Security & Identity",
+    "requiresValue": false
+  },
+  {
+    "name": "SentimentInsightsFeature",
+    "description": "Provides license for Sentiment Insights for customer sentiment analysis.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "ServiceCatalog",
+    "description": "Enables Employee Service Catalog for products and services.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "ServiceCloud",
+    "description": "Assigns the Service Cloud license for multi-channel customer support.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "ServiceCloudVoicePartnerTelephony",
+    "description": "Assigns Service Cloud Voice with Partner Telephony add-on license.",
+    "category": "Service Cloud",
+    "requiresValue": true,
+    "valueRange": "1-50"
+  },
+  {
+    "name": "ServiceUser",
+    "description": "Adds one Service Cloud User license.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "SessionIdInLogEnabled",
+    "description": "Enables Apex debug logs to include session IDs.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "SharedActivities",
+    "description": "Allow users to relate multiple contacts to tasks and events.",
+    "category": "Sales Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "Sites",
+    "description": "Enables Salesforce Sites for public websites integrated with your org.",
+    "category": "Experience Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "SocialCustomerService",
+    "description": "Enables Social Customer Service with post defaults and Starter Pack.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "StateAndCountryPicklist",
+    "description": "Enables state and country/territory picklists with standardized lists.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "StreamingAPI",
+    "description": "Enables Streaming API.",
+    "category": "Data & Integration",
+    "requiresValue": false
+  },
+  {
+    "name": "StreamingEventsPerDay",
+    "description": "Increases maximum delivered PushTopic event notifications per day.",
+    "category": "Data & Integration",
+    "requiresValue": true,
+    "valueRange": "10000-50000"
+  },
+  {
+    "name": "SubPerStreamingChannel",
+    "description": "Increases maximum concurrent clients per generic streaming channel.",
+    "category": "Data & Integration",
+    "requiresValue": true,
+    "valueRange": "20-4000"
+  },
+  {
+    "name": "SubPerStreamingTopic",
+    "description": "Increases maximum concurrent clients per PushTopic streaming channel.",
+    "category": "Data & Integration",
+    "requiresValue": true,
+    "valueRange": "20-4000"
+  },
+  {
+    "name": "SurveyAdvancedFeatures",
+    "description": "Enables Salesforce Feedback Management - Growth license features.",
+    "category": "Service Cloud",
+    "requiresValue": false
+  },
+  {
+    "name": "SustainabilityCloud",
+    "description": "Provides permission sets for Sustainability Cloud installation and configuration.",
+    "category": "Industries - Sustainability",
+    "requiresValue": false
+  },
+  {
+    "name": "SustainabilityApp",
+    "description": "Provides permission sets for Net Zero Cloud configuration.",
+    "category": "Industries - Sustainability",
+    "requiresValue": false
+  },
+  {
+    "name": "TalentRecruitmentManagement",
+    "description": "Enables talent recruitment and hiring for Public Sector Solutions.",
+    "category": "Industries - Public Sector",
+    "requiresValue": false
+  },
+  {
+    "name": "TCRMforSustainability",
+    "description": "Enables Tableau CRM for Net Zero Analytics app management.",
+    "category": "Industries - Sustainability",
+    "requiresValue": false
+  },
+  {
+    "name": "TransactionFinalizers",
+    "description": "Enables implementing and attaching Apex Finalizers to Queueable jobs.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "UsageManagement",
+    "description": "Enables Usage Management for tracking consumption of usage-based products.",
+    "category": "Commerce",
+    "requiresValue": false
+  },
+  {
+    "name": "VolunteerManagement",
+    "description": "Gives access to Volunteer Management features.",
+    "category": "Industries - Nonprofit",
+    "requiresValue": false
+  },
+  {
+    "name": "WaveMaxCurrency",
+    "description": "Increases maximum supported currencies for CRM Analytics.",
+    "category": "Analytics & Einstein",
+    "requiresValue": true,
+    "valueRange": "1-5"
+  },
+  {
+    "name": "WavePlatform",
+    "description": "Enables the Wave Platform license.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "Workflow",
+    "description": "Enables Workflow for automating internal procedures.",
+    "category": "Automation",
+    "requiresValue": false
+  },
+  {
+    "name": "WorkflowFlowActionFeature",
+    "description": "Allows launching a flow from a workflow action.",
+    "category": "Automation",
+    "requiresValue": false
+  },
+  {
+    "name": "WorkplaceCommandCenterUser",
+    "description": "Enables Workplace Command Center features (Employee, Crisis objects).",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "WorkThanksPref",
+    "description": "Enables the give thanks feature in Chatter.",
+    "category": "Core Platform",
+    "requiresValue": false
+  },
+  {
+    "name": "EdPredictionM3Threshold",
+    "description": "Sets records threshold to 10 for Einstein Discovery M3 prediction service.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "EdPredictionTimeout",
+    "description": "Sets maximum single Einstein Discovery prediction duration to 100ms.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "EdPredictionTimeoutBulk",
+    "description": "Sets maximum bulk Einstein Discovery prediction duration to 10ms.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  },
+  {
+    "name": "EdPredictionTimeoutByomBulk",
+    "description": "Sets maximum BYOM Einstein Discovery prediction duration to 100ms.",
+    "category": "Analytics & Einstein",
+    "requiresValue": false
+  }
+]

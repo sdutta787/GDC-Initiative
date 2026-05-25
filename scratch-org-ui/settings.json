@@ -1,0 +1,400 @@
+[
+  {
+    "category": "Lightning Experience",
+    "settings": [
+      {
+        "key": "lightningExperienceSettings.enableS1DesktopEnabled",
+        "label": "Enable Lightning Experience",
+        "description": "Enables the Lightning Experience UI for desktop users.",
+        "type": "boolean",
+        "default": true
+      }
+    ]
+  },
+  {
+    "category": "Chatter & Collaboration",
+    "settings": [
+      {
+        "key": "chatterSettings.enableChatter",
+        "label": "Enable Chatter",
+        "description": "Enables Chatter feeds, groups, and collaboration features.",
+        "type": "boolean",
+        "default": true
+      },
+      {
+        "key": "chatterSettings.enableChatterEmoticons",
+        "label": "Enable Chatter Emoticons",
+        "description": "Allows emoticons in Chatter posts.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Communities & Experience Cloud",
+    "settings": [
+      {
+        "key": "communitiesSettings.enableNetworksEnabled",
+        "label": "Enable Networks (Communities)",
+        "description": "Required to use Experience Cloud sites. Must also add the 'Communities' feature.",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "key": "communitiesSettings.enableOotbProfExtUserOpsEnable",
+        "label": "Enable External User Operations",
+        "description": "Enables out-of-box profile external user operations.",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "key": "experienceBundleSettings.enableExperienceBundleMetadata",
+        "label": "Enable Experience Bundle Metadata",
+        "description": "Allows deploying Experience Cloud sites as metadata bundles.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Security & Access",
+    "settings": [
+      {
+        "key": "securitySettings.enableAdminLoginAsAnyUser",
+        "label": "Admin Login As Any User",
+        "description": "Allows admins to log in as any user in the org.",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "key": "securitySettings.sessionSettings.forceRelogin",
+        "label": "Force Re-login",
+        "description": "Forces users to re-login when session expires.",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "key": "passwordPolicies.enableSetPasswordInApi",
+        "label": "Allow Set Password in API",
+        "description": "Enables setting passwords via API without the old password.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Language & Translation",
+    "settings": [
+      {
+        "key": "languageSettings.enableTranslationWorkbench",
+        "label": "Enable Translation Workbench",
+        "description": "Enables the Translation Workbench for multi-language support.",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "key": "languageSettings.enableEndUserLanguages",
+        "label": "Enable End User Languages",
+        "description": "Allows end users to select their language preference.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Notes & Content",
+    "settings": [
+      {
+        "key": "enhancedNotesSettings.enableEnhancedNotes",
+        "label": "Enable Enhanced Notes",
+        "description": "Enables the improved rich-text note editor.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Path & Guidance",
+    "settings": [
+      {
+        "key": "pathAssistantSettings.pathAssistantEnabled",
+        "label": "Enable Path Assistant",
+        "description": "Enables Path for guiding users through business processes.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Omni-Channel",
+    "settings": [
+      {
+        "key": "omniChannelSettings.enableOmniChannel",
+        "label": "Enable Omni-Channel",
+        "description": "Enables Omni-Channel routing for cases, chats, and other work items.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Case Management",
+    "settings": [
+      {
+        "key": "caseSettings.systemUserEmail",
+        "label": "System User Email",
+        "description": "Email address used as the system user for case automation.",
+        "type": "string",
+        "default": ""
+      },
+      {
+        "key": "caseSettings.emailToCase.enableEmailToCase",
+        "label": "Enable Email-to-Case",
+        "description": "Allows automatic case creation from inbound emails.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Mobile",
+    "settings": [
+      {
+        "key": "mobileSettings.enableS1EncryptedStoragePref2",
+        "label": "Enable Mobile Encrypted Storage",
+        "description": "Enables encrypted storage for the Salesforce mobile app.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "User Engagement",
+    "settings": [
+      {
+        "key": "userEngagementSettings.enableOrchestrationInSandbox",
+        "label": "Enable Orchestration in Sandbox",
+        "description": "Allows orchestration features to work in sandbox/scratch orgs.",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "key": "userEngagementSettings.enableOrgUserAssistEnabled",
+        "label": "Enable Org User Assist",
+        "description": "Enables in-app guidance and assistance for users.",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "key": "userEngagementSettings.enableShowSalesforceUserAssist",
+        "label": "Show Salesforce User Assist",
+        "description": "Shows Salesforce-provided user assistance content.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Knowledge",
+    "settings": [
+      {
+        "key": "knowledgeSettings.enableKnowledge",
+        "label": "Enable Knowledge",
+        "description": "Enables Salesforce Knowledge for article management.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Live Agent & Chat",
+    "settings": [
+      {
+        "key": "liveAgentSettings.enableLiveAgent",
+        "label": "Enable Live Agent",
+        "description": "Enables web-based live chat support.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Territory Management",
+    "settings": [
+      {
+        "key": "territory2Settings.enableTerritoryManagement2",
+        "label": "Enable Territory Management 2.0",
+        "description": "Enables Enterprise Territory Management.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Forecasting",
+    "settings": [
+      {
+        "key": "forecastingSettings.enableForecasting",
+        "label": "Enable Forecasting",
+        "description": "Enables Collaborative Forecasts for sales predictions.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Orders & Contracts",
+    "settings": [
+      {
+        "key": "orderSettings.enableOrders",
+        "label": "Enable Orders",
+        "description": "Enables the Orders object for order management.",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "key": "orderSettings.enableNegativeQuantity",
+        "label": "Enable Negative Quantity",
+        "description": "Allows negative quantities on order products (for returns).",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Opportunities & Products",
+    "settings": [
+      {
+        "key": "opportunitySettings.enableOpportunityTeam",
+        "label": "Enable Opportunity Teams",
+        "description": "Enables team selling with Opportunity Teams.",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "key": "productSettings.enableCascadeActivateToRelatedPrices",
+        "label": "Cascade Activate to Related Prices",
+        "description": "Activating a product automatically activates its prices.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Quotes",
+    "settings": [
+      {
+        "key": "quoteSettings.enableQuote",
+        "label": "Enable Quotes",
+        "description": "Enables the Quotes feature for creating quotes from opportunities.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Email & Activities",
+    "settings": [
+      {
+        "key": "emailAdministrationSettings.enableEnhancedEmailEnabled",
+        "label": "Enable Enhanced Email",
+        "description": "Enables the enhanced email experience with threading and rich text.",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "key": "activitySettings.enableActivityReminders",
+        "label": "Enable Activity Reminders",
+        "description": "Enables reminders on tasks and events.",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "key": "activitySettings.enableEmailTracking",
+        "label": "Enable Email Tracking",
+        "description": "Tracks email opens and link clicks.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Einstein & AI",
+    "settings": [
+      {
+        "key": "einsteinGptSettings.enableEinsteinGptPlatform",
+        "label": "Enable Einstein GPT Platform",
+        "description": "Required for generative AI features. Must also add 'Einstein1AIPlatform' feature.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Revenue Cloud",
+    "settings": [
+      {
+        "key": "revenueManagementSettings.enableCoreCPQ",
+        "label": "Enable Core CPQ",
+        "description": "Required for Revenue Cloud. Must also add the 'CoreCpq' feature.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Field Service",
+    "settings": [
+      {
+        "key": "fieldServiceSettings.enableFieldServiceLightning",
+        "label": "Enable Field Service Lightning",
+        "description": "Enables Field Service Lightning features.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "Events & Platform Events",
+    "settings": [
+      {
+        "key": "eventSettings.enableDeleteMonitoringData",
+        "label": "Enable Delete Monitoring Data",
+        "description": "Allows deletion of event monitoring data.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  },
+  {
+    "category": "DevOps & Development",
+    "settings": [
+      {
+        "key": "devHubSettings.enableDevOpsCenter",
+        "label": "Enable DevOps Center",
+        "description": "Enables DevOps Center features in the org.",
+        "type": "boolean",
+        "default": false
+      },
+      {
+        "key": "sourceTrackingSettings.enableSourceTracking",
+        "label": "Enable Source Tracking",
+        "description": "Enables source tracking for detecting metadata changes.",
+        "type": "boolean",
+        "default": true
+      }
+    ]
+  },
+  {
+    "category": "Data & Privacy",
+    "settings": [
+      {
+        "key": "encryptionManagementSettings.enableEncryptionManagement",
+        "label": "Enable Encryption Management",
+        "description": "Enables Shield Platform Encryption management.",
+        "type": "boolean",
+        "default": false
+      }
+    ]
+  }
+]

@@ -8,10 +8,14 @@
 #   - Walks the user through authorizing a Dev Hub (with guidance to enable it first)
 #   - Builds a scratch org definition file interactively (generic defaults, optional
 #     features and settings)
-#   - Saves the definition file to <repo>/orgs2/
+#   - Saves the definition file to <repo>/scratch-orgs-templates/
 #   - Creates the scratch org, optionally sets a password, and offers to open it
 #
-# Usage:  bash scripts/scratch-org-setup/create-scratch-org.sh
+# Modes:
+#   --web   (default) Launch an interactive web UI in the browser
+#   --cli   Use the traditional command-line interactive flow
+#
+# Usage:  bash create-scratch-org.sh [--web|--cli]
 
 set -u
 set -o pipefail
@@ -35,10 +39,96 @@ header() { printf "\n%s== %s ==%s\n" "$BOLD" "$*" "$RESET"; }
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$SCRIPT_DIR"
-OUT_DIR="$REPO_ROOT/orgs2"
+OUT_DIR="$REPO_ROOT/scratch-orgs-templates"
 mkdir -p "$OUT_DIR"
 
 DOCS_URL="https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_scratch_orgs_def_file_config_values.htm"
+UI_DIR="$SCRIPT_DIR/scratch-org-ui"
+
+# ---------- mode selection ----------
+MODE="web"
+for arg in "$@"; do
+  case "$arg" in
+    --cli) MODE="cli" ;;
+    --web) MODE="web" ;;
+    -h|--help)
+      say "Usage: bash create-scratch-org.sh [--web|--cli]"
+      say ""
+      say "  --web  (default) Launch interactive web UI in the browser"
+      say "  --cli  Use the traditional command-line interactive flow"
+      exit 0
+      ;;
+  esac
+done
+
+# ---------- web UI mode ----------
+launch_web_ui() {
+  header "Scratch Org Creator — Web UI"
+
+  if ! command -v python3 >/dev/null 2>&1; then
+    err "python3 is required. Please install it and retry."
+    exit 1
+  fi
+
+  # Check if Flask is available (system-wide or in local vendor dir)
+  VENDOR_PATH="$UI_DIR/vendor"
+  if ! python3 -c "import sys; sys.path.insert(0,'$VENDOR_PATH'); import flask" 2>/dev/null; then
+    info "Installing Flask (one-time setup)..."
+    if pip3 install --quiet --target "$VENDOR_PATH" flask 2>/dev/null; then
+      ok "Flask installed to local vendor directory."
+    elif python3 -m pip install --quiet --target "$VENDOR_PATH" flask 2>/dev/null; then
+      ok "Flask installed to local vendor directory."
+    else
+      err "Could not install Flask. Please run: pip3 install flask"
+      warn "Falling back to CLI mode..."
+      return 1
+    fi
+  fi
+
+  # Find an available port
+  PORT=$(python3 -c "import socket; s=socket.socket(); s.bind(('',0)); print(s.getsockname()[1]); s.close()")
+
+  info "Starting web server on http://localhost:$PORT ..."
+  python3 "$UI_DIR/app.py" "$PORT" &
+  SERVER_PID=$!
+
+  sleep 1
+
+  if ! kill -0 "$SERVER_PID" 2>/dev/null; then
+    err "Web server failed to start."
+    warn "Falling back to CLI mode..."
+    return 1
+  fi
+
+  ok "Web UI running at: ${BOLD}http://localhost:$PORT${RESET}"
+  say ""
+
+  # Open browser
+  local url="http://localhost:$PORT"
+  if command -v open >/dev/null 2>&1; then
+    open "$url"
+  elif command -v xdg-open >/dev/null 2>&1; then
+    xdg-open "$url"
+  else
+    say "Open this URL in your browser: $url"
+  fi
+
+  say "${DIM}Press Ctrl+C to stop the server when done.${RESET}"
+  say ""
+
+  # Wait for server process
+  trap "kill $SERVER_PID 2>/dev/null; exit 0" INT TERM
+  wait "$SERVER_PID" 2>/dev/null
+  exit 0
+}
+
+if [ "$MODE" = "web" ]; then
+  if launch_web_ui; then
+    exit 0
+  fi
+  warn "Web UI unavailable, continuing with CLI mode..."
+  say ""
+fi
 
 # ---------- helpers ----------
 prompt() {
