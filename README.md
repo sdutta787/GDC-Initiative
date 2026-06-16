@@ -4,8 +4,14 @@ An interactive tool for creating Salesforce scratch orgs with a modern web-based
 
 ## Quick Start
 
+**macOS / Linux:**
 ```bash
 bash create-scratch-org.sh
+```
+
+**Windows:**
+```cmd
+create-scratch-org.bat
 ```
 
 This opens an interactive web UI in your browser where you can configure and create scratch orgs visually.
@@ -24,8 +30,14 @@ Flask (the web framework) is installed automatically on first run — no manual 
 
 ### Web UI Mode (default)
 
+**macOS / Linux:**
 ```bash
 bash create-scratch-org.sh
+```
+
+**Windows:**
+```cmd
+create-scratch-org.bat
 ```
 
 The browser opens with a step-by-step wizard:
@@ -84,16 +96,38 @@ Features are organized into these groups for easy discovery:
 
 ```
 .
-├── create-scratch-org.sh            # Main entry point (run this)
+├── create-scratch-org.sh            # Main entry point — macOS/Linux
+├── create-scratch-org.bat           # Main entry point — Windows
+├── build-installer.py               # Generates distribution files (.sh + .bat)
 ├── scratch-org-ui/
 │   ├── app.py                       # Flask web server
 │   ├── features.json                # 296 features from Salesforce docs
+│   ├── settings.json                # 39 categorized org settings
 │   ├── requirements.txt             # Python dependencies
 │   ├── templates/
 │   │   └── index.html               # Web UI (single-page app)
 │   └── vendor/                      # Auto-installed Flask (gitignored)
-└── scratch-orgs-templates/          # Generated definition files saved here
+├── scratch-orgs-templates/          # Generated definition files saved here
+└── docs/                            # User guide and documentation
 ```
+
+## Distribution
+
+To distribute the tool to customers, run:
+
+```bash
+python3 build-installer.py
+```
+
+This generates:
+
+| File | Platform | Description |
+|------|----------|-------------|
+| `scratch-org-creator.sh` | macOS/Linux | Single self-contained script |
+| `scratch-org-creator.bat` + `scratch-org-creator-data.py` | Windows | Batch launcher + companion data file (distribute both) |
+
+For macOS/Linux customers: give them just `scratch-org-creator.sh`.
+For Windows customers: give them both `scratch-org-creator.bat` and `scratch-org-creator-data.py` (keep in same folder).
 
 ## Updating the Features List
 

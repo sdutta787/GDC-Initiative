@@ -1,0 +1,31 @@
+{
+  "orgName": "My Scratch Org",
+  "edition": "Developer",
+  "hasSampleData": true,
+  "features": [
+    "AnalyticsAdminPerms",
+    "DevelopmentWave",
+    "CustomerExperienceAnalytics",
+    "AddInsightsQueryLimit:2"
+  ],
+  "settings": {
+    "securitySettings": {
+      "enableAdminLoginAsAnyUser": true
+    },
+    "passwordPolicies": {
+      "enableSetPasswordInApi": true
+    },
+    "languageSettings": {
+      "enableTranslationWorkbench": true
+    },
+    "enhancedNotesSettings": {
+      "enableEnhancedNotes": true
+    },
+    "omniChannelSettings": {
+      "enableOmniChannel": true
+    },
+    "encryptionManagementSettings": {
+      "enableEncryptionManagement": true
+    }
+  }
+}
